@@ -1,0 +1,12 @@
+{
+  "name": "waters",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "WATERS — experiencia 3D interactiva (Three.js) + API de contacto en Vercel",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": { "node": ">=18" }
+}

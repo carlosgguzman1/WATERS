@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>WATERS — Las marcas que fluyen, ganan</title>
+<meta name="description" content="WATERS — estudio de marketing, estrategia y experiencias digitales. Las marcas que fluyen, ganan.">
+<meta name="theme-color" content="#04101f">
+<meta property="og:title" content="WATERS — Las marcas que fluyen, ganan">
+<meta property="og:description" content="Estudio de marketing &amp; experiencias digitales. Estrategia, contenido y tecnología que se mueven como el agua.">
+<meta property="og:image" content="/img/og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" as="image" href="img/front.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+:root{
+  --ink:#04101f; --ink2:#071b30; --aqua:#5ef2ff; --aqua2:#9fe8ef; --coral:#ff9e7a;
+  --violet:#a78bfa; --text:#e9f7fa; --muted:#8fb3bf; --line:rgba(158,232,239,.18);
+  --glass:rgba(6,26,44,.42); --display:'Syne',sans-serif; --body:'Manrope',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--ink);color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased}
+body.has-cursor, body.has-cursor a, body.has-cursor button{cursor:none}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;outline:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0}
+::selection{background:var(--aqua);color:var(--ink)}
+
+/* ───────── Loader ───────── */
+#loader{position:fixed;inset:0;z-index:100;background:linear-gradient(180deg,rgba(4,16,31,.35) 0%,rgba(4,16,31,.55) 50%,rgba(4,16,31,.92) 100%),url(img/front.webp) center/cover no-repeat,#04101f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;transition:opacity 1.1s ease, visibility 1.1s}
+#loader.gone{opacity:0;visibility:hidden}
+.loader-word{font-family:var(--display);font-weight:800;font-size:clamp(64px,15vw,210px);letter-spacing:-.04em;line-height:.9;
+  color:transparent;-webkit-text-stroke:1px rgba(158,232,239,.45);
+  background:linear-gradient(to top,var(--aqua) 0%,#2fb7c9 calc(var(--fill,0%) - 2%),transparent var(--fill,0%));
+  -webkit-background-clip:text;background-clip:text}
+.loader-meta{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;display:flex;gap:28px}
+.loader-actions{display:flex;gap:14px;opacity:0;transform:translateY(10px);transition:all .8s ease;pointer-events:none}
+.loader-actions.show{opacity:1;transform:none;pointer-events:auto}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;border:1px solid var(--line);font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;transition:background .35s, color .35s, border-color .35s, transform .35s}
+.btn:hover{background:var(--aqua);color:var(--ink);border-color:var(--aqua)}
+.btn.solid{background:var(--aqua);color:var(--ink);border-color:var(--aqua)}
+.btn.solid:hover{background:#fff;border-color:#fff}
+
+/* ───────── Header ───────── */
+header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:22px clamp(18px,3vw,40px);pointer-events:none}
+header > *{pointer-events:auto}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.02em}
+.logo svg{width:28px;height:28px}
+nav.main{display:flex;gap:6px;padding:6px;border-radius:999px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);position:relative}
+nav.main a{position:relative;z-index:1;padding:10px 16px;border-radius:999px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .4s;white-space:nowrap}
+nav.main a:hover{color:var(--text)}
+nav.main a.active{color:var(--ink)}
+.nav-pill{position:absolute;top:6px;bottom:6px;left:0;width:0;border-radius:999px;background:var(--aqua);transition:all .6s cubic-bezier(.7,0,.2,1);z-index:0}
+.head-right{display:flex;align-items:center;gap:10px}
+.icon-btn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:border-color .3s}
+.icon-btn:hover{border-color:var(--aqua)}
+.sound-bars{display:flex;gap:2px;align-items:flex-end;height:14px}
+.sound-bars i{width:2px;background:var(--aqua);height:3px;transition:height .3s}
+.sound-on .sound-bars i{animation:bar 1s ease-in-out infinite}
+.sound-bars i:nth-child(2){animation-delay:.2s}.sound-bars i:nth-child(3){animation-delay:.4s}.sound-bars i:nth-child(4){animation-delay:.1s}
+@keyframes bar{0%,100%{height:3px}50%{height:14px}}
+.burger{display:none}
+
+/* ───────── HUD ───────── */
+.hud-depth{position:fixed;left:clamp(18px,3vw,40px);top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:14px;font-family:var(--mono);font-size:10px;letter-spacing:.25em;color:var(--muted);pointer-events:none}
+.hud-depth .track{width:1px;height:200px;background:var(--line);position:relative}
+.hud-depth .dot{position:absolute;left:-4px;width:9px;height:9px;border-radius:50%;background:var(--aqua);box-shadow:0 0 16px var(--aqua);top:0}
+.hud-depth .val{writing-mode:vertical-rl;transform:rotate(180deg);color:var(--text)}
+.hud-bottom{position:fixed;bottom:22px;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:flex-end;padding:0 clamp(18px,3vw,40px);pointer-events:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.hud-bottom > *{pointer-events:auto}
+.room-count b{color:var(--text);font-weight:500;font-size:13px}
+.steps{display:flex;gap:8px}
+.steps button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:var(--glass);backdrop-filter:blur(10px);transition:all .3s}
+.steps button:hover{border-color:var(--aqua);color:var(--aqua)}
+.scroll-hint{display:flex;align-items:center;gap:10px}
+.scroll-hint .mouse{width:16px;height:24px;border:1px solid var(--muted);border-radius:10px;position:relative}
+.scroll-hint .mouse::after{content:'';position:absolute;left:50%;top:5px;width:2px;height:5px;margin-left:-1px;background:var(--aqua);border-radius:2px;animation:wheel 1.6s infinite}
+@keyframes wheel{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(8px)}}
+
+/* ───────── Rooms (panels) ───────── */
+.room{position:fixed;z-index:15;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .6s ease, visibility .6s}
+.room.active{opacity:1;visibility:visible;pointer-events:auto;transition-delay:.9s}
+.room .rv{opacity:0;transform:translateY(26px);transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0) * 90ms + 1s)}
+.room.active .rv{opacity:1;transform:none}
+.room:not(.active) .rv{transition-delay:0s;transition-duration:.4s}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--aqua);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--aqua)}
+.panel{right:clamp(18px,4vw,64px);top:50%;transform:translateY(-50%);width:min(440px,38vw);max-height:76vh;display:flex;flex-direction:column}
+.panel-card{padding:30px;border-radius:24px;background:linear-gradient(160deg,rgba(10,40,62,.62),rgba(4,16,31,.55));border:1px solid var(--line);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);overflow:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.panel h2{font-family:var(--display);font-weight:800;font-size:clamp(34px,3.6vw,54px);line-height:.95;letter-spacing:-.03em;margin:16px 0 14px}
+.panel h2 em{font-style:normal;color:var(--aqua)}
+.panel p.lead{color:var(--muted);font-size:15.5px;line-height:1.6}
+.list{margin-top:22px;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.list button{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;padding:16px 4px;border-bottom:1px solid var(--line);text-align:left;transition:padding .35s, background .35s}
+.list button:hover,.list button.hl{padding-left:14px;background:linear-gradient(90deg,rgba(94,242,255,.09),transparent)}
+.list .n{font-family:var(--mono);font-size:11px;color:var(--aqua)}
+.list .t{font-family:var(--display);font-weight:700;font-size:18px}
+.list .t small{display:block;font-family:var(--body);font-weight:400;font-size:12.5px;color:var(--muted);margin-top:3px}
+.list .arr{opacity:.4;transition:transform .35s, opacity .35s}
+.list button:hover .arr{transform:translateX(4px);opacity:1;color:var(--aqua)}
+.hint{margin-top:18px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
+.hint .pulse{width:8px;height:8px;border-radius:50%;background:var(--aqua);box-shadow:0 0 0 0 rgba(94,242,255,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(94,242,255,.6)}100%{box-shadow:0 0 0 14px rgba(94,242,255,0)}}
+
+/* Room photos */
+.room-photo{position:relative;margin:-30px -30px 22px;height:200px;overflow:hidden;border-radius:24px 24px 0 0;background:#061a2b}
+.room-photo img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.14);transition:transform 7s cubic-bezier(.2,.7,.2,1)}
+.room.active .room-photo img{transform:scale(1.02)}
+.room-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,16,31,0) 35%,rgba(7,30,48,.92) 100%)}
+.room-photo span{position:absolute;left:18px;bottom:14px;z-index:1;font-family:var(--mono);font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
+.room-photo span::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--aqua);box-shadow:0 0 10px var(--aqua)}
+.d-photo{position:relative;margin:-30px -28px 26px;height:220px;overflow:hidden}
+.d-photo img{width:100%;height:100%;object-fit:cover}
+.d-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,12,24,0) 30%,rgba(5,24,38,.95))}
+.d-photo + .d-num{margin-top:-90px;position:relative;z-index:1}
+.explore-btn{height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:10px;transition:border-color .3s}
+.explore-btn:hover{border-color:var(--aqua)}
+.explore-btn i{display:grid;grid-template-columns:repeat(2,4px);gap:3px}.explore-btn i b{width:4px;height:4px;background:var(--aqua);border-radius:1px}
+
+/* Front */
+#room-front{left:clamp(18px,6vw,96px);bottom:clamp(90px,14vh,150px);max-width:min(760px,90vw)}
+.hero-title{font-family:var(--display);font-weight:800;font-size:clamp(72px,11.5vw,190px);letter-spacing:-.055em;line-height:.82;margin:18px 0 22px;
+  background:linear-gradient(180deg,#ffffff 0%,#c9f6fb 45%,#5ef2ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 40px rgba(94,242,255,.25))}
+.hero-sub{font-size:clamp(16px,1.35vw,19px);line-height:1.55;color:#cfe7ec;max-width:520px}
+.hero-sub b{color:#fff;font-weight:600}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero-tags{display:flex;gap:18px;margin-top:28px;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.hero-tags span::before{content:'◇ ';color:var(--aqua)}
+
+/* Contact */
+#room-contacto.panel{width:min(480px,40vw)}
+form.contact{display:flex;flex-direction:column;gap:14px;margin-top:22px}
+.field{position:relative}
+.field input,.field textarea,.field select{width:100%;padding:16px 16px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(4,16,31,.5);color:var(--text);font:inherit;font-size:15px;outline:none;transition:border-color .3s, background .3s;resize:none}
+.field select{appearance:none;-webkit-appearance:none}
+.field select option{background:#071b30}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--aqua);background:rgba(4,16,31,.75)}
+.field label{position:absolute;left:16px;top:-8px;padding:0 6px;background:#0a2438;border-radius:6px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{display:none}
+.chips label{padding:9px 14px;border-radius:999px;border:1px solid var(--line);font-size:13px;color:var(--muted);transition:all .3s}
+.chips input:checked + label{background:var(--aqua);color:var(--ink);border-color:var(--aqua)}
+.hp{position:absolute;left:-9999px;opacity:0}
+.form-status{font-family:var(--mono);font-size:12px;letter-spacing:.05em;line-height:1.5;min-height:18px;color:var(--muted)}
+.form-status.ok{color:var(--aqua)} .form-status.err{color:var(--coral)}
+.contact-alt{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted)}
+.contact-alt a{color:var(--text)}
+.contact-alt a:hover{color:var(--aqua)}
+
+/* Drawer */
+#veil{position:fixed;inset:0;z-index:40;background:rgba(2,8,16,.45);opacity:0;visibility:hidden;transition:all .5s}
+#veil.open{opacity:1;visibility:visible}
+#drawer{position:fixed;z-index:41;top:12px;bottom:12px;right:12px;width:min(560px,calc(100vw - 24px));border-radius:26px;border:1px solid var(--line);
+  background:linear-gradient(170deg,rgba(9,38,58,.9),rgba(3,12,24,.94));backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);transform:translateX(110%);transition:transform .8s cubic-bezier(.7,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+#drawer.open{transform:none}
+#drawer .d-head{display:flex;justify-content:space-between;align-items:center;padding:24px 28px;border-bottom:1px solid var(--line)}
+#drawer .d-body{padding:30px 28px 40px;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#drawer .d-num{font-family:var(--display);font-weight:800;font-size:110px;line-height:.8;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1px rgba(94,242,255,.5)}
+#drawer h3{font-family:var(--display);font-weight:800;font-size:clamp(34px,4vw,48px);letter-spacing:-.03em;line-height:1;margin:18px 0 12px}
+#drawer .quote{font-size:19px;line-height:1.45;color:#d6f3f7;margin:8px 0 26px;padding-left:16px;border-left:2px solid var(--aqua)}
+#drawer h4{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--aqua);margin:26px 0 12px}
+#drawer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+#drawer li{padding:14px 16px;border-radius:14px;background:rgba(94,242,255,.05);border:1px solid var(--line);font-size:15px;line-height:1.5;color:#cfe5ea}
+#drawer li b{color:#fff;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kpi{padding:16px;border-radius:14px;border:1px solid var(--line);background:rgba(4,16,31,.5)}
+.kpi span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.kpi b{font-family:var(--display);font-size:18px;font-weight:700}
+.d-foot{margin-top:30px;display:flex;gap:10px;flex-wrap:wrap}
+
+/* Cursor + splash */
+#cursor{position:fixed;left:0;top:0;z-index:90;pointer-events:none;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;border:1px solid rgba(158,232,239,.7);transition:width .35s, height .35s, margin .35s, background .35s, border-color .35s;display:grid;place-items:center;mix-blend-mode:normal}
+#cursor .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);opacity:0;transition:opacity .25s;white-space:nowrap}
+#cursor.big{width:92px;height:92px;margin:-46px 0 0 -46px;background:var(--aqua);border-color:var(--aqua)}
+#cursor.big .lbl{opacity:1}
+#cursor-dot{position:fixed;left:0;top:0;z-index:91;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:var(--aqua);pointer-events:none}
+body:not(.has-cursor) #cursor, body:not(.has-cursor) #cursor-dot{display:none}
+#splash{position:fixed;inset:0;z-index:25;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(159,232,239,.0) 0%,rgba(159,232,239,.35) 60%,rgba(255,255,255,.6) 100%);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#splash.go{animation:splash .9s ease-out}
+@keyframes splash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
+.grain{position:fixed;inset:-50%;z-index:24;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-5%,3%)}40%{transform:translate(3%,-4%)}60%{transform:translate(-2%,5%)}80%{transform:translate(4%,1%)}100%{transform:translate(0,0)}}
+.vignette{position:fixed;inset:0;z-index:14;pointer-events:none;background:radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(2,8,16,.55) 100%)}
+
+/* Mobile menu */
+#mmenu{position:fixed;inset:0;z-index:29;background:rgba(3,12,24,.94);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);padding:96px clamp(16px,4vw,64px) 40px;overflow:auto;opacity:0;visibility:hidden;transition:opacity .5s, visibility .5s}
+#mmenu.open{opacity:1;visibility:visible}
+.explore-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:22px}
+.explore-head h3{font-family:var(--display);font-weight:800;font-size:clamp(34px,5vw,64px);letter-spacing:-.03em;line-height:1}
+.explore-head p{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.explore-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ex-card{position:relative;display:block;aspect-ratio:16/10;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#061a2b;opacity:0;transform:translateY(24px);transition:opacity .6s, transform .6s cubic-bezier(.2,.7,.2,1), border-color .3s}
+#mmenu.open .ex-card{opacity:1;transform:none;transition-delay:calc(var(--i)*70ms + .1s)}
+.ex-card img{width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.9);transition:transform 1s cubic-bezier(.2,.7,.2,1), filter .6s}
+.ex-card:hover img{transform:scale(1.07);filter:brightness(.95) saturate(1.05)}
+.ex-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(3,12,24,.88))}
+.ex-card .meta{position:absolute;left:18px;right:18px;bottom:16px;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.ex-card small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--aqua);margin-bottom:6px}
+.ex-card b{font-family:var(--display);font-weight:800;font-size:clamp(20px,2vw,28px);letter-spacing:-.02em;line-height:1}
+.ex-card .go{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.35);white-space:nowrap;transition:all .3s}
+.ex-card:hover .go{background:var(--aqua);color:var(--ink);border-color:var(--aqua)}
+.ex-card.active{border-color:var(--aqua)}
+.ex-card.active .go{background:var(--aqua);color:var(--ink);border-color:var(--aqua)}
+
+@media (max-width:900px){
+  nav.main{display:none}
+  .burger{display:grid}
+  .hud-depth{display:none}
+  .panel,#room-contacto.panel{left:12px;right:12px;width:auto;top:auto;bottom:76px;transform:none;max-height:50vh}
+  .panel-card{padding:22px;border-radius:20px}
+  .panel h2{font-size:34px;margin:10px 0 8px}
+  .panel p.lead{font-size:14.5px}
+  #room-front{left:18px;right:18px;bottom:96px}
+  .hero-tags{display:none}
+  .room-photo{margin:-22px -22px 16px;height:120px;border-radius:20px 20px 0 0}
+  .explore-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .ex-card{border-radius:14px}
+  .ex-card .go{display:none}
+  .ex-card .meta{left:12px;bottom:10px}
+  .explore-btn{display:none}
+  .d-photo{height:170px}
+  .scroll-hint{display:none}
+  .vignette{background:linear-gradient(to top,rgba(2,10,20,.85) 0%,rgba(2,10,20,.35) 45%,transparent 70%),radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(2,8,16,.55) 100%)}
+  .hero-sub{text-shadow:0 2px 18px rgba(0,0,0,.6)}
+}
+@media (prefers-reduced-motion:reduce){ .grain{animation:none} }
+</style>
+</head>
+<body>
+
+<canvas id="gl" tabindex="0" aria-label="Escena 3D interactiva de WATERS"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div id="splash"></div>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-word" id="loaderWord">WATERS</div>
+  <div class="loader-meta"><span id="loaderPct">000%</span><span>Llenando el océano</span></div>
+  <div class="loader-actions" id="loaderActions">
+    <button class="btn solid" data-enter="sound">Entrar con sonido</button>
+    <button class="btn" data-enter="mute">Entrar sin sonido</button>
+  </div>
+</div>
+
+<!-- Header -->
+<header>
+  <a href="#front" class="logo" data-go="front" aria-label="WATERS inicio">
+    <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#5ef2ff" stroke-opacity=".5"/><path d="M5 17c2.2 0 2.2-2 4.4-2s2.2 2 4.4 2 2.2-2 4.4-2 2.2 2 4.4 2 2.2-2 4.4-2" stroke="#5ef2ff" stroke-width="1.6" stroke-linecap="round"/><path d="M8 21.5c1.6 0 1.6-1.5 3.2-1.5s1.6 1.5 3.2 1.5 1.6-1.5 3.2-1.5 1.6 1.5 3.2 1.5 1.6-1.5 3.2-1.5" stroke="#5ef2ff" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round"/></svg>
+    WATERS
+  </a>
+  <nav class="main" id="nav">
+    <span class="nav-pill" id="navPill"></span>
+    <a href="#101" data-go="101">101</a>
+    <a href="#marketing-strategy" data-go="marketing-strategy">Marketing Strategy</a>
+    <a href="#studio" data-go="studio">Studio</a>
+    <a href="#lab" data-go="lab">Lab</a>
+    <a href="#contacto" data-go="contacto">Contacto</a>
+  </nav>
+  <div class="head-right">
+    <button class="explore-btn" id="exploreBtn" aria-label="Explorar rooms"><i><b></b><b></b><b></b><b></b></i>Explorar</button>
+    <button class="icon-btn" id="soundBtn" aria-label="Activar o silenciar sonido"><span class="sound-bars"><i></i><i></i><i></i><i></i></span></button>
+    <button class="icon-btn burger" id="burger" aria-label="Abrir menú"><svg width="18" height="18" viewBox="0 0 18 18" stroke="#e9f7fa" stroke-width="1.5"><path d="M2 6h14M2 12h14"/></svg></button>
+  </div>
+</header>
+
+<div id="mmenu" role="dialog" aria-label="Explorar rooms">
+  <div class="explore-head"><h3>Explorar</h3><p>6 rooms · de la superficie al abismo</p></div>
+  <div class="explore-grid">
+    <a class="ex-card" href="#front" data-go="front" style="--i:0"><img src="img/front-sm.webp" alt="Superficie — La casa" loading="lazy" decoding="async"><span class="meta"><span><small>00 · LA CASA</small><b>Superficie</b></span><span class="go">Entrar →</span></span></a>
+    <a class="ex-card" href="#101" data-go="101" style="--i:1"><img src="img/101-sm.webp" alt="101 — La sala" loading="lazy" decoding="async"><span class="meta"><span><small>01 · LA SALA</small><b>101</b></span><span class="go">Entrar →</span></span></a>
+    <a class="ex-card" href="#marketing-strategy" data-go="marketing-strategy" style="--i:2"><img src="img/strategy-sm.webp" alt="Marketing Strategy — War room" loading="lazy" decoding="async"><span class="meta"><span><small>02 · WAR ROOM</small><b>Marketing Strategy</b></span><span class="go">Entrar →</span></span></a>
+    <a class="ex-card" href="#studio" data-go="studio" style="--i:3"><img src="img/studio-sm.webp" alt="Studio — El estudio" loading="lazy" decoding="async"><span class="meta"><span><small>03 · EL ESTUDIO</small><b>Studio</b></span><span class="go">Entrar →</span></span></a>
+    <a class="ex-card" href="#lab" data-go="lab" style="--i:4"><img src="img/lab-sm.webp" alt="Lab — Bajo el agua" loading="lazy" decoding="async"><span class="meta"><span><small>04 · BAJO EL AGUA</small><b>Lab</b></span><span class="go">Entrar →</span></span></a>
+    <a class="ex-card" href="#contacto" data-go="contacto" style="--i:5"><img src="img/front-sm.webp" alt="Contacto — Hablemos" loading="lazy" decoding="async"><span class="meta"><span><small>05 · HABLEMOS</small><b>Contacto</b></span><span class="go">Entrar →</span></span></a>
+  </div>
+</div>
+
+<!-- HUD -->
+<div class="hud-depth"><span>0 m</span><div class="track"><span class="dot" id="depthDot"></span></div><span>70 m</span><span class="val" id="depthVal">SUPERFICIE</span></div>
+<div class="hud-bottom">
+  <div class="room-count"><b id="roomNum">00</b> / 05 &nbsp;—&nbsp; <span id="roomName">Superficie</span></div>
+  <div class="scroll-hint"><span class="mouse"></span><span id="scrollTxt">Scroll para sumergirte</span></div>
+  <div class="steps"><button id="prevBtn" aria-label="Room anterior">↑</button><button id="nextBtn" aria-label="Room siguiente">↓</button></div>
+</div>
+
+<!-- ROOMS -->
+<section class="room" id="room-front" data-room="front">
+  <div class="eyebrow rv" style="--i:0">Estudio de marketing &amp; experiencias digitales</div>
+  <h1 class="hero-title rv" style="--i:1">WATERS</h1>
+  <p class="hero-sub rv" style="--i:2"><b>Las marcas que fluyen, ganan.</b> Estrategia, contenido y tecnología que se mueven como el agua: con dirección, con constancia y con fuerza.</p>
+  <div class="hero-cta rv" style="--i:3">
+    <button class="btn solid" data-go="101">Sumergirse ↓</button>
+    <button class="btn" data-go="marketing-strategy">Ver la estrategia</button>
+  </div>
+  <div class="hero-tags rv" style="--i:4"><span>Toca el agua</span><span>Toca la casa</span><span>Scroll = profundidad</span></div>
+</section>
+
+<section class="room panel" id="room-101" data-room="101">
+  <div class="panel-card">
+    <div class="room-photo"><img src="img/101-sm.webp" srcset="img/101-sm.webp 900w, img/101.webp 1680w" sizes="(max-width:900px) 100vw, 480px" alt="WATERS — 101" loading="lazy" decoding="async"><span>La sala · −20 m</span></div>
+    <div class="eyebrow rv" style="--i:0">Room 01 · −20 m</div>
+    <h2 class="rv" style="--i:1">Waters <em>101</em></h2>
+    <p class="lead rv" style="--i:2">Antes de vender, se entiende. Tres principios que sostienen todo lo que hacemos — la base que cualquier marca necesita antes de gastar un dólar en anuncios.</p>
+    <div class="list rv" style="--i:3" data-list="101">
+      <button data-detail="claridad"><span class="n">01</span><span class="t">Claridad<small>Qué vendes, a quién y por qué tú</small></span><span class="arr">→</span></button>
+      <button data-detail="corriente"><span class="n">02</span><span class="t">Corriente<small>Constancia que se convierte en sistema</small></span><span class="arr">→</span></button>
+      <button data-detail="profundidad"><span class="n">03</span><span class="t">Profundidad<small>Comunidad, datos y retención</small></span><span class="arr">→</span></button>
+    </div>
+    <div class="hint rv" style="--i:4"><span class="pulse"></span>Toca un monolito</div>
+  </div>
+</section>
+
+<section class="room panel" id="room-marketing-strategy" data-room="marketing-strategy">
+  <div class="panel-card">
+    <div class="room-photo"><img src="img/strategy-sm.webp" srcset="img/strategy-sm.webp 900w, img/strategy.webp 1680w" sizes="(max-width:900px) 100vw, 480px" alt="WATERS — Marketing Strategy" loading="lazy" decoding="async"><span>War room · −38 m</span></div>
+    <div class="eyebrow rv" style="--i:0">Room 02 · −38 m</div>
+    <h2 class="rv" style="--i:1">Marketing <em>Strategy</em></h2>
+    <p class="lead rv" style="--i:2">Un embudo pensado como el océano: de la superficie, donde te descubren, a la profundidad, donde se quedan contigo para siempre.</p>
+    <div class="list rv" style="--i:3" data-list="marketing-strategy">
+      <button data-detail="superficie"><span class="n">01</span><span class="t">Superficie<small>Atracción — que te descubran</small></span><span class="arr">→</span></button>
+      <button data-detail="corriente-s"><span class="n">02</span><span class="t">Corriente<small>Consideración — que confíen</small></span><span class="arr">→</span></button>
+      <button data-detail="inmersion"><span class="n">03</span><span class="t">Inmersión<small>Conversión — que compren</small></span><span class="arr">→</span></button>
+      <button data-detail="abismo"><span class="n">04</span><span class="t">Abismo<small>Retención — que vuelvan y recomienden</small></span><span class="arr">→</span></button>
+    </div>
+    <div class="hint rv" style="--i:4"><span class="pulse"></span>Toca un anillo del embudo</div>
+  </div>
+</section>
+
+<section class="room panel" id="room-studio" data-room="studio">
+  <div class="panel-card">
+    <div class="room-photo"><img src="img/studio-sm.webp" srcset="img/studio-sm.webp 900w, img/studio.webp 1680w" sizes="(max-width:900px) 100vw, 480px" alt="WATERS — Studio" loading="lazy" decoding="async"><span>El estudio · −50 m</span></div>
+    <div class="eyebrow rv" style="--i:0">Room 03 · −50 m</div>
+    <h2 class="rv" style="--i:1">Studio</h2>
+    <p class="lead rv" style="--i:2">Lo que construimos. Cinco corrientes de trabajo que se conectan entre sí — nada suelto, todo empuja en la misma dirección.</p>
+    <div class="list rv" style="--i:3" data-list="studio">
+      <button data-detail="branding"><span class="n">01</span><span class="t">Branding fluido<small>Identidad, voz y sistema visual</small></span><span class="arr">→</span></button>
+      <button data-detail="web3d"><span class="n">02</span><span class="t">Web &amp; 3D<small>Experiencias como esta</small></span><span class="arr">→</span></button>
+      <button data-detail="contenido"><span class="n">03</span><span class="t">Contenido &amp; Reels<small>Producción con sistema</small></span><span class="arr">→</span></button>
+      <button data-detail="ads"><span class="n">04</span><span class="t">Paid Media<small>Meta, Google y TikTok Ads</small></span><span class="arr">→</span></button>
+      <button data-detail="ia"><span class="n">05</span><span class="t">Automatización IA<small>Agentes que venden 24/7</small></span><span class="arr">→</span></button>
+    </div>
+    <div class="hint rv" style="--i:4"><span class="pulse"></span>Toca una carta del carrusel</div>
+  </div>
+</section>
+
+<section class="room panel" id="room-lab" data-room="lab">
+  <div class="panel-card">
+    <div class="room-photo"><img src="img/lab-sm.webp" srcset="img/lab-sm.webp 900w, img/lab.webp 1680w" sizes="(max-width:900px) 100vw, 480px" alt="WATERS — Lab" loading="lazy" decoding="async"><span>Bajo el agua · −60 m</span></div>
+    <div class="eyebrow rv" style="--i:0">Room 04 · −60 m</div>
+    <h2 class="rv" style="--i:1">Lab</h2>
+    <p class="lead rv" style="--i:2">Aquí probamos lo que viene antes de que llegue. Mueve el cursor: la medusa te sigue. Tócala y reacciona.</p>
+    <div class="list rv" style="--i:3" data-list="lab">
+      <button data-detail="webgl"><span class="n">A</span><span class="t">3D en tiempo real<small>WebGL, shaders, partículas</small></span><span class="arr">→</span></button>
+      <button data-detail="agentes"><span class="n">B</span><span class="t">Agentes IA<small>Voz, WhatsApp, Instagram</small></span><span class="arr">→</span></button>
+      <button data-detail="audio"><span class="n">C</span><span class="t">Audio generativo<small>El sonido de esta página</small></span><span class="arr">→</span></button>
+    </div>
+    <div class="hint rv" style="--i:4"><span class="pulse"></span>8 000 partículas · 60 fps</div>
+  </div>
+</section>
+
+<section class="room panel" id="room-contacto" data-room="contacto">
+  <div class="panel-card">
+    <div class="room-photo"><img src="img/front-sm.webp" srcset="img/front-sm.webp 900w, img/front.webp 1680w" sizes="(max-width:900px) 100vw, 480px" alt="WATERS — Contacto" loading="lazy" decoding="async"><span>La casa · superficie</span></div>
+    <div class="eyebrow rv" style="--i:0">Room 05 · Superficie</div>
+    <h2 class="rv" style="--i:1">Hablemos<em>.</em></h2>
+    <p class="lead rv" style="--i:2">Cuéntanos hacia dónde quieres que fluya tu marca. Respondemos en menos de 24 horas.</p>
+    <form class="contact rv" style="--i:3" id="contactForm" novalidate>
+      <div class="field"><label for="f-name">Nombre</label><input id="f-name" name="name" required autocomplete="name" maxlength="120"></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" required autocomplete="email" maxlength="160"></div>
+      <div class="chips" role="group" aria-label="Servicio de interés">
+        <input type="checkbox" id="c1" name="services" value="Estrategia"><label for="c1">Estrategia</label>
+        <input type="checkbox" id="c2" name="services" value="Branding"><label for="c2">Branding</label>
+        <input type="checkbox" id="c3" name="services" value="Web 3D"><label for="c3">Web 3D</label>
+        <input type="checkbox" id="c4" name="services" value="Contenido"><label for="c4">Contenido</label>
+        <input type="checkbox" id="c5" name="services" value="Ads"><label for="c5">Ads</label>
+        <input type="checkbox" id="c6" name="services" value="IA"><label for="c6">IA</label>
+      </div>
+      <div class="field"><label for="f-msg">Mensaje</label><textarea id="f-msg" name="message" rows="4" required maxlength="3000"></textarea></div>
+      <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn solid" type="submit" id="sendBtn" style="justify-content:center">Enviar mensaje →</button>
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+    </form>
+    <div class="contact-alt rv" style="--i:4"><span id="contactEmail"></span><span>© <span id="yr"></span> WATERS</span></div>
+  </div>
+</section>
+
+<!-- Drawer -->
+<div id="veil"></div>
+<aside id="drawer" aria-hidden="true">
+  <div class="d-head"><span class="eyebrow" id="dEyebrow">Detalle</span><button class="icon-btn" id="dClose" aria-label="Cerrar">✕</button></div>
+  <div class="d-body" id="dBody"></div>
+</aside>
+
+<div id="cursor"><span class="lbl" id="cursorLbl">Abrir</span></div>
+<div id="cursor-dot"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+/* ═════════════ CONFIG — edita aquí ═════════════ */
+const CONFIG = {
+  email: 'hola@waters.studio',        // cámbialo por el email real
+  instagram: 'https://instagram.com/', // cámbialo por el IG real
+  contactEndpoint: '/api/contact'
+};
+
+/* ═════════════ CONTENIDO DE DETALLES ═════════════ */
+const DETAILS = {
+  claridad:{ room:'101', n:'01', eyebrow:'Waters 101', title:'Claridad', quote:'Una marca que no se explica en cinco segundos, no existe.',
+    sections:[{h:'Lo que definimos', items:['<b>Propuesta de valor en una frase</b> — qué resuelves y para quién, sin adjetivos vacíos.','<b>Cliente ideal</b> — dolores, deseos, objeciones y dónde pasa su tiempo.','<b>Diferenciador real</b> — lo que tú haces y la competencia no puede copiar fácil.','<b>Mensaje núcleo + 3 pilares</b> — todo el contenido sale de aquí.']}],
+    kpis:[['Entregable','Brand brief'],['Tiempo','1–2 semanas']] },
+  corriente:{ room:'101', n:'02', eyebrow:'Waters 101', title:'Corriente', quote:'El agua no gana por fuerza. Gana por constancia.',
+    sections:[{h:'El sistema', items:['<b>Calendario 4·3·2</b> — por cada 9 piezas: 4 de valor, 3 de prueba social, 2 de venta.','<b>1 idea → 6 piezas</b> — un tema se convierte en reel, carrusel, historia, email, post y anuncio.','<b>Formatos que mueven</b> — reels, carruseles, historias, email y WhatsApp.','<b>Regla de los 90 días</b> — ninguna estrategia se juzga antes de 90 días de constancia.']}],
+    kpis:[['Frecuencia','5–7 piezas/sem'],['Horizonte','90 días']] },
+  profundidad:{ room:'101', n:'03', eyebrow:'Waters 101', title:'Profundidad', quote:'Lo que no se ve es lo que sostiene lo que se ve.',
+    sections:[{h:'Debajo de la superficie', items:['<b>Comunidad</b> — DMs, WhatsApp y respuestas rápidas construyen confianza.','<b>Datos</b> — píxel, eventos de conversión y CRM desde el día uno.','<b>Retención</b> — la segunda compra es la que de verdad paga el negocio.','<b>Recomendación</b> — una marca que se recomienda sola baja el costo de todo lo demás.']}],
+    kpis:[['Métrica norte','LTV : CAC ≥ 3'],['Foco','Recompra']] },
+
+  superficie:{ room:'marketing-strategy', n:'01', eyebrow:'Marketing Strategy · Etapa 1', title:'Superficie', quote:'Objetivo: que te descubran las personas correctas.',
+    sections:[{h:'Canales',items:['Reels y TikTok con hooks en los primeros 2 segundos.','Meta Ads de alcance y video views para alimentar audiencias.','Colaboraciones con creadores locales.']},{h:'Tácticas',items:['<b>70% valor / 30% marca</b> en el contenido de descubrimiento.','Tendencias adaptadas a la voz de la marca, no copiadas.','Testear 3–5 creativos por semana y escalar el ganador.']}],
+    kpis:[['Alcance','↑ semanal'],['CPM','↓ costo'],['Retención 3s','> 35%'],['Seguidores','calificados']] },
+  'corriente-s':{ room:'marketing-strategy', n:'02', eyebrow:'Marketing Strategy · Etapa 2', title:'Corriente', quote:'Objetivo: que te entiendan y confíen en ti.',
+    sections:[{h:'Canales',items:['Carruseles educativos y videos de preguntas frecuentes.','Testimonios, casos reales y antes/después.','Landing page + retargeting a quien ya interactuó.']},{h:'Tácticas',items:['<b>Lead magnet</b> — guía, quiz o descuento a cambio de contacto.','Responder objeciones antes de que aparezcan.','Contenido guardable: listas, guías, comparaciones.']}],
+    kpis:[['CTR','> 1.5%'],['Guardados','↑'],['Tiempo en página','> 45 s'],['Leads','semanales']] },
+  inmersion:{ room:'marketing-strategy', n:'03', eyebrow:'Marketing Strategy · Etapa 3', title:'Inmersión', quote:'Objetivo: que compren — sin fricción.',
+    sections:[{h:'Canales',items:['Ofertas con urgencia real (no inventada).','WhatsApp e Instagram DM con agente IA respondiendo 24/7.','Checkout optimizado y secuencias de email/SMS de carrito abandonado.']},{h:'Tácticas',items:['<b>Oferta irresistible</b> — producto + bono + garantía.','Prueba social en el punto de compra.','Checkout en 2 pasos, métodos de pago locales.']}],
+    kpis:[['Conversión','> 2%'],['CPA','objetivo'],['ROAS','> 3x'],['Ticket promedio','↑']] },
+  abismo:{ room:'marketing-strategy', n:'04', eyebrow:'Marketing Strategy · Etapa 4', title:'Abismo', quote:'Objetivo: que vuelvan, se queden y te recomienden.',
+    sections:[{h:'Canales',items:['Email/SMS post-compra y onboarding.','Comunidad privada y contenido exclusivo.','Programa de referidos y suscripciones.']},{h:'Tácticas',items:['<b>Día 1, 7, 30</b> — tres toques post-compra que crean hábito.','Recompensas por referido para ambos lados.','Encuestas NPS y corrección rápida.']}],
+    kpis:[['LTV','↑'],['Recompra','> 30%'],['Churn','↓'],['NPS','> 50']] },
+
+  branding:{ room:'studio', n:'01', eyebrow:'Studio', title:'Branding fluido', quote:'Identidad que se adapta a cada canal sin perder su forma.',
+    sections:[{h:'Entregables',items:['Estrategia de marca, nombre y posicionamiento.','Logo, paleta, tipografía y sistema visual.','Voz y tono + guía de marca lista para el equipo.']}], kpis:[['Tiempo','3–5 semanas'],['Formato','Brandbook']] },
+  web3d:{ room:'studio', n:'02', eyebrow:'Studio', title:'Web & 3D', quote:'Sitios que la gente comparte porque se sienten diferentes.',
+    sections:[{h:'Entregables',items:['Experiencias 3D en el navegador (como esta).','Tiendas Shopify y landing pages de conversión.','Rendimiento, SEO técnico y analítica instalada.']}], kpis:[['Stack','Three.js · Vercel'],['Tiempo','2–6 semanas']] },
+  contenido:{ room:'studio', n:'03', eyebrow:'Studio', title:'Contenido & Reels', quote:'Producción con sistema, no con suerte.',
+    sections:[{h:'Entregables',items:['Calendario mensual basado en pilares.','Guiones, grabación y edición de reels.','Carruseles, historias y copy listos para publicar.']}], kpis:[['Volumen','12–30 piezas/mes'],['Ciclo','Mensual']] },
+  ads:{ room:'studio', n:'04', eyebrow:'Studio', title:'Paid Media', quote:'Cada dólar con una tarea clara en el embudo.',
+    sections:[{h:'Entregables',items:['Estructura de campañas por etapa del embudo.','Testeo creativo semanal y escalado.','Reporte con CPA, ROAS y aprendizajes.']}], kpis:[['Plataformas','Meta · Google · TikTok'],['Reporte','Semanal']] },
+  ia:{ room:'studio', n:'05', eyebrow:'Studio', title:'Automatización IA', quote:'Tu marca respondiendo, calificando y vendiendo mientras duermes.',
+    sections:[{h:'Entregables',items:['Agentes IA para WhatsApp, Instagram y voz.','Captura de leads conectada a tu CRM.','Flujos de seguimiento automáticos.']}], kpis:[['Disponibilidad','24/7'],['Respuesta','< 10 s']] },
+
+  webgl:{ room:'lab', n:'A', eyebrow:'Lab', title:'3D en tiempo real', quote:'Este océano no es un video: se calcula 60 veces por segundo en tu pantalla.',
+    sections:[{h:'Lo que hay aquí',items:['Olas con shaders propios y ondas que reaccionan a tu toque.','Cáusticas de luz en el fondo marino y rayos de sol volumétricos.','Medusa de ~8 000 partículas animadas en la GPU.']}], kpis:[['Motor','Three.js'],['Peso','< 100 KB']] },
+  agentes:{ room:'lab', n:'B', eyebrow:'Lab', title:'Agentes IA', quote:'Conversaciones que se sienten humanas, a la escala de una máquina.',
+    sections:[{h:'Experimentos',items:['Agentes de voz que contestan llamadas y agendan.','Vendedores IA en DMs con catálogo y registro de órdenes.','Asistentes internos que resumen, redactan y reportan.']}], kpis:[['Canales','Voz · WA · IG'],['Estado','En producción']] },
+  audio:{ room:'lab', n:'C', eyebrow:'Lab', title:'Audio generativo', quote:'El sonido de esta página no es un archivo: se genera en vivo.',
+    sections:[{h:'Cómo funciona',items:['Ruido marrón filtrado que imita el oleaje.','Al sumergirte, un filtro de paso bajo apaga los agudos — como bajo el agua.','Activa el sonido con el botón de arriba a la derecha.']}], kpis:[['API','Web Audio'],['Archivos','0']] },
+};
+
+/* ═════════════ ROOMS ═════════════ */
+const ROOMS = [
+  { id:'front',              name:'Superficie',         cam:[-6,8.5,46], tgt:[3,5,-14],   shift:[-0.2,0] },
+  { id:'101',                name:'101',                cam:[0,-17,27],  tgt:[0,-20,0],    shift:[0.16,0] },
+  { id:'marketing-strategy', name:'Marketing Strategy', cam:[-30,-31,15],tgt:[-30,-38.5,-10],shift:[0.16,0] },
+  { id:'studio',             name:'Studio',             cam:[30,-48,17], tgt:[30,-50,-10], shift:[0.16,0] },
+  { id:'lab',                name:'Lab',                cam:[0,-55.5,4], tgt:[0,-60,-24],  shift:[0.16,0] },
+  { id:'contacto',           name:'Contacto',           cam:[0,6,72],    tgt:[0,9,-100],   shift:[0.17,0], noPull:true },
+];
+const idxOf = id => Math.max(0, ROOMS.findIndex(r => r.id === id));
+
+/* ═════════════ RENDERER / SCENE ═════════════ */
+const isMobile = matchMedia('(max-width:900px)').matches || matchMedia('(pointer:coarse)').matches;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: !isMobile, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 1.75));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 1200);
+const C = hex => new THREE.Color(hex);
+const PAL = {
+  skyTop:C('#030c1a'), skyMid:C('#0f3a58'), horizon:C('#e2a487'), sun:C('#ffd6ad'), oceanFar:C('#2c4c5a'),
+  deep:C('#01131f'), shallow:C('#0b5566'), underTop:C('#0b4d66'), underLight:C('#a8eef2'),
+  aqua:C('#5ef2ff'), violet:C('#a78bfa'), coral:C('#ff9e7a'), pink:C('#ff7ac6'),
+  fogAbove:C('#e2a487'), fogShallow:C('#0a4a62'), fogDeep:C('#010a14'),
+};
+const SUN = new THREE.Vector3(0, 0.16, -1).normalize();
+scene.fog = new THREE.FogExp2(PAL.fogAbove.clone(), 0.004);
+const FOG = { uFogColor:{ value: scene.fog.color }, uFogDensity:{ value: 0.004 }, uUnder:{ value: 0 } };
+const TIME = { value: 0 };
+
+const FOG_GLSL = `
+uniform vec3 uFogColor; uniform float uFogDensity;
+vec3 applyFog(vec3 col, vec3 wpos){ float d = distance(cameraPosition, wpos); float f = 1.0 - exp(-d*d*uFogDensity*uFogDensity); return mix(col, uFogColor, clamp(f,0.,1.)); }`;
+const OUT_GLSL = `
+#include <tonemapping_fragment>
+#include <colorspace_fragment>
+`;
+
+/* ─── Sky dome ─── */
+const sky = new THREE.Mesh(new THREE.SphereGeometry(600, 48, 24), new THREE.ShaderMaterial({
+  side: THREE.BackSide, depthWrite:false, fog:false,
+  uniforms:{ ...FOG, uTop:{value:PAL.skyTop}, uMid:{value:PAL.skyMid}, uHor:{value:PAL.horizon}, uSunC:{value:PAL.sun}, uFar:{value:PAL.oceanFar}, uSun:{value:SUN}, uTime:TIME },
+  vertexShader:`varying vec3 vDir; void main(){ vDir = position; vec4 p = projectionMatrix*modelViewMatrix*vec4(position,1.); gl_Position = p.xyww; }`,
+  fragmentShader:`uniform vec3 uTop,uMid,uHor,uSunC,uFar,uSun,uFogColor; uniform float uUnder,uTime; varying vec3 vDir;
+  float h21(vec2 p){ return fract(sin(dot(p, vec2(41.3,289.1)))*45758.5453); }
+  void main(){ vec3 d = normalize(vDir); float y = d.y; vec3 col;
+    col = mix(uHor, uMid, smoothstep(0.0, 0.28, y));
+    col = mix(col, uTop, smoothstep(0.25, 0.85, y));
+    if (y < 0.0) col = uHor;
+    float sd = max(dot(d, uSun), 0.0);
+    col += uSunC * (pow(sd, 1400.0)*8.0 + pow(sd, 22.0)*0.45 + pow(sd,4.0)*0.08);
+    vec2 g = floor(vec2(atan(d.z,d.x), asin(clamp(y,-1.,1.)))*180.);
+    float s = step(0.9975, h21(g)) * smoothstep(0.3, 0.7, y) * (0.6+0.4*sin(uTime*2.0+h21(g)*20.));
+    col += vec3(s);
+    if (uUnder > 0.5) col = uFogColor;
+    gl_FragColor = vec4(col,1.); ${OUT_GLSL} }`
+}));
+sky.renderOrder = -1;
+scene.add(sky);
+
+/* ─── Ocean ─── */
+const RIPPLES = Array.from({length:8}, () => new THREE.Vector4(0,0,-100,0));
+let rippleIdx = 0;
+function addRipple(x, z, strength=1){ RIPPLES[rippleIdx].set(x, z, TIME.value, strength); rippleIdx = (rippleIdx+1) % RIPPLES.length; }
+const HOUSE_POS = new THREE.Vector3(4, 0, -18), HOUSE_ROT = -0.32;
+const WAVE_U = { uTime:TIME, uRip:{value:RIPPLES}, uCalm:{value:new THREE.Vector3(HOUSE_POS.x, HOUSE_POS.z, 19)} };
+const WAVE_GLSL = `uniform float uTime; uniform vec4 uRip[8]; uniform vec3 uCalm;
+  float H(vec2 p){ float h = 0.0;
+    h += 0.60*sin(dot(p, vec2(0.80, 0.60))*0.16 + uTime*0.85);
+    h += 0.36*sin(dot(p, vec2(-0.50,0.86))*0.25 + uTime*1.15);
+    h += 0.18*sin(dot(p, vec2(0.95,-0.30))*0.52 + uTime*1.70);
+    h += 0.09*sin(dot(p, vec2(-0.20,-0.98))*1.05 + uTime*2.30);
+    h += 0.04*sin(dot(p, vec2(0.6,-0.8))*2.1 + uTime*3.1);
+    for (int i=0;i<8;i++){ vec4 r = uRip[i]; float t = uTime - r.z;
+      if (t > 0.0 && t < 7.0){ float d = distance(p, r.xy); float front = t*7.5;
+        float env = exp(-pow(d-front,2.0)*0.035) * exp(-t*0.5) * r.w; h += env * 1.1 * sin(d*1.25 - t*9.0); } }
+    float calm = mix(0.12, 1.0, smoothstep(uCalm.z, uCalm.z + 14.0, distance(p, uCalm.xy)));
+    return h * calm; }`;
+const oceanGeo = new THREE.PlaneGeometry(640, 640, isMobile?180:260, isMobile?180:260); oceanGeo.rotateX(-Math.PI/2);
+const ocean = new THREE.Mesh(oceanGeo, new THREE.ShaderMaterial({
+  side: THREE.DoubleSide,
+  uniforms:{ ...FOG, ...WAVE_U, uSun:{value:SUN}, uSunC:{value:PAL.sun}, uHor:{value:PAL.horizon}, uTop:{value:PAL.skyMid},
+    uDeep:{value:PAL.deep}, uShallow:{value:PAL.shallow}, uUTop:{value:PAL.underTop}, uULight:{value:PAL.underLight} },
+  vertexShader:`${WAVE_GLSL} varying vec3 vW; varying vec3 vN; varying float vH;
+  void main(){ vec3 p = position; float h = H(p.xz); float e = 0.35;
+    float hx = H(p.xz + vec2(e,0.)); float hz = H(p.xz + vec2(0.,e));
+    vN = normalize(vec3(h-hx, e, h-hz)); p.y += h; vH = h;
+    vec4 w = modelMatrix*vec4(p,1.); vW = w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }`,
+  fragmentShader:`uniform vec3 uSun,uSunC,uHor,uTop,uDeep,uShallow,uUTop,uULight; varying vec3 vW; varying vec3 vN; varying float vH; ${FOG_GLSL}
+  void main(){ vec3 V = normalize(cameraPosition - vW); vec3 N = normalize(vN); vec3 col;
+    if (gl_FrontFacing){
+      float fr = mix(0.03, 1.0, pow(1.0 - max(dot(N,V),0.0), 5.0));
+      vec3 R = reflect(-V, N); R.y = abs(R.y);
+      vec3 skyc = mix(uHor, uTop, smoothstep(0.0, 0.5, R.y));
+      vec3 water = mix(uDeep, uShallow, clamp(vH*0.35 + 0.45, 0.0, 1.0));
+      col = mix(water, skyc, fr);
+      float sd = max(dot(R, uSun), 0.0);
+      col += uSunC * (pow(sd, 260.0)*4.0 + pow(sd, 14.0)*0.22);
+      col += vec3(0.85,0.95,1.0) * smoothstep(0.8, 1.35, vH) * 0.22;
+      col = applyFog(col, vW);
+    } else {
+      N = -N; float c = max(dot(N, V), 0.0);
+      float win = smoothstep(0.55, 0.92, c);
+      col = mix(uUTop*0.55, uULight*1.15, win);
+      col += uULight * pow(win, 6.0) * 0.6;
+      col = applyFog(col, vW);
+    }
+    gl_FragColor = vec4(col, 1.0); ${OUT_GLSL} }`
+}));
+scene.add(ocean);
+
+/* ─── Lights ─── */
+scene.add(new THREE.HemisphereLight(0x8fe9ff, 0x02121c, 0.7));
+const sunL = new THREE.DirectionalLight(0xffd6ad, 1.4); sunL.position.set(0, 60, -100); scene.add(sunL);
+const pl = (c,i,d,x,y,z) => { const l = new THREE.PointLight(c,i,d,1.6); l.position.set(x,y,z); scene.add(l); return l; };
+pl(0x5ef2ff, 60, 50, 0,-14,10); pl(0xa78bfa, 50, 50, -30,-30,0); pl(0x5ef2ff, 60, 50, 30,-44,4); pl(0xff7ac6, 40, 40, 0,-54,-14);
+
+/* ─── Seafloor with caustics ─── */
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(500, 500, 1, 1).rotateX(-Math.PI/2), new THREE.ShaderMaterial({
+  uniforms:{ ...FOG, uTime:TIME, uSand:{value:C('#0a3140')}, uLight:{value:C('#8ff6ff')} },
+  vertexShader:`varying vec3 vW; void main(){ vec4 w = modelMatrix*vec4(position,1.); vW = w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }`,
+  fragmentShader:`uniform float uTime; uniform vec3 uSand, uLight; varying vec3 vW; ${FOG_GLSL}
+  float caustic(vec2 uv, float t){ const float TAU = 6.28318530718; vec2 p = mod(uv*TAU, TAU) - 250.0; vec2 i = p; float c = 1.0; float inten = 0.005;
+    for (int n = 0; n < 5; n++){ float tt = t * (1.0 - (3.5 / float(n+1))); i = p + vec2(cos(tt - i.x) + sin(tt + i.y), sin(tt - i.y) + cos(tt + i.x));
+      c += 1.0/length(vec2(p.x / (sin(i.x+tt)/inten), p.y / (cos(i.y+tt)/inten))); }
+    c /= 5.0; c = 1.17 - pow(c, 1.4); return pow(abs(c), 8.0); }
+  void main(){ float cs = caustic(vW.xz*0.035, uTime*0.35) + 0.5*caustic(vW.xz*0.06 + 3.1, uTime*0.27);
+    vec3 col = uSand*(0.55 + 0.25*sin(vW.x*0.05)*sin(vW.z*0.04)) + uLight * cs * 0.55;
+    gl_FragColor = vec4(applyFog(col, vW), 1.0); ${OUT_GLSL} }`
+}));
+floor.position.y = -70; scene.add(floor);
+
+/* rocks */
+const rockMat = new THREE.MeshStandardMaterial({ color:0x07222d, roughness:1, flatShading:true });
+for (let i=0;i<70;i++){
+  const r = new THREE.Mesh(new THREE.DodecahedronGeometry(1, 0), rockMat);
+  const a = Math.random()*Math.PI*2, d = 12 + Math.random()*110;
+  r.position.set(Math.cos(a)*d, -70, Math.sin(a)*d - 20);
+  const s = 0.8 + Math.random()*Math.random()*7; r.scale.set(s*(0.8+Math.random()*0.6), s*(0.4+Math.random()*0.7), s);
+  r.rotation.set(Math.random()*3, Math.random()*3, Math.random()*3); scene.add(r);
+}
+/* kelp ribbons */
+const kelpMat = new THREE.ShaderMaterial({ side:THREE.DoubleSide, transparent:true, depthWrite:false,
+  uniforms:{ ...FOG, uTime:TIME, uC1:{value:C('#0b3a3a')}, uC2:{value:C('#2fb39a')} },
+  vertexShader:`uniform float uTime; attribute float aSeed; varying float vY; varying vec3 vW;
+    void main(){ vec3 p = position; float k = uv.y; p.x += sin(uTime*0.9 + k*3.0 + aSeed)*k*k*2.2; p.z += cos(uTime*0.7 + k*2.0 + aSeed)*k*1.2;
+      vY = k; vec4 w = modelMatrix*instanceMatrix*vec4(p,1.); vW = w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }`,
+  fragmentShader:`uniform vec3 uC1,uC2; varying float vY; varying vec3 vW; ${FOG_GLSL}
+    void main(){ vec3 col = mix(uC1, uC2, vY*0.8); gl_FragColor = vec4(applyFog(col, vW), 0.85); ${OUT_GLSL} }` });
+const kelpGeo = new THREE.PlaneGeometry(0.9, 18, 1, 24); kelpGeo.translate(0, 9, 0);
+const KELP_N = 90; const seeds = new Float32Array(KELP_N); for (let i=0;i<KELP_N;i++) seeds[i]=Math.random()*10;
+kelpGeo.setAttribute('aSeed', new THREE.InstancedBufferAttribute(seeds, 1));
+const kelp = new THREE.InstancedMesh(kelpGeo, kelpMat, KELP_N);
+const dm = new THREE.Object3D();
+const segDist = (px,pz,ax,az,bx,bz) => { const vx=bx-ax, vz=bz-az, wx=px-ax, wz=pz-az; const t=Math.max(0,Math.min(1,(wx*vx+wz*vz)/(vx*vx+vz*vz))); return Math.hypot(px-(ax+t*vx), pz-(az+t*vz)); };
+const kelpOk = (x,z) => ROOMS.every(r => r.cam[1] > 0 || segDist(x,z,r.cam[0],r.cam[2],r.tgt[0],r.tgt[2]) > 11);
+for (let i=0;i<KELP_N;i++){ let a, d, x, z, tries=0; do { a=Math.random()*Math.PI*2; d=18+Math.random()*90; x=Math.cos(a)*d; z=Math.sin(a)*d-20; } while(!kelpOk(x,z) && ++tries < 40); dm.position.set(x, -70, z); dm.rotation.y=Math.random()*3; const s=0.6+Math.random()*1.2; dm.scale.set(1,s,1); dm.updateMatrix(); kelp.setMatrixAt(i, dm.matrix); }
+scene.add(kelp);
+
+/* ─── God rays ─── */
+const rayMat = (seed) => new THREE.ShaderMaterial({ transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, side:THREE.DoubleSide, fog:false,
+  uniforms:{ uTime:TIME, uSeed:{value:seed}, uC:{value:PAL.underLight}, uUnderV:FOG.uUnder },
+  vertexShader:`varying vec3 vN; varying vec3 vV; varying float vY; void main(){ vec4 mv = modelViewMatrix*vec4(position,1.); vN = normalize(normalMatrix*normal); vV = normalize(-mv.xyz); vY = uv.y; gl_Position = projectionMatrix*mv; }`,
+  fragmentShader:`uniform float uTime,uSeed,uUnderV; uniform vec3 uC; varying vec3 vN; varying vec3 vV; varying float vY;
+    void main(){ float f = pow(abs(dot(vN, vV)), 2.5); float a = f * vY*vY * (0.55 + 0.45*sin(uTime*0.6 + uSeed*7.0)) * 0.11 * uUnderV; gl_FragColor = vec4(uC*a, a); }` });
+const rays = [];
+for (let i=0;i<12;i++){
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(1.5+Math.random()*2, 7+Math.random()*7, 72, 24, 1, true), rayMat(Math.random()));
+  m.position.set((Math.random()-.5)*110, -36, (Math.random()-.5)*70 - 10); m.rotation.z = (Math.random()-.5)*0.25; m.rotation.x = 0.12;
+  m.userData.base = m.rotation.z; rays.push(m); scene.add(m);
+}
+
+/* ─── Bubbles / marine snow ─── */
+function makeBubbles(n){
+  const g = new THREE.BufferGeometry(); const pos = new Float32Array(n*3), sp = new Float32Array(n), sz = new Float32Array(n);
+  for (let i=0;i<n;i++){ pos[i*3]=(Math.random()-.5)*140; pos[i*3+1]=Math.random()*70; pos[i*3+2]=(Math.random()-.5)*110-10; sp[i]=0.6+Math.random()*2.4; sz[i]=0.25+Math.random()*Math.random()*1.1; }
+  g.setAttribute('position', new THREE.BufferAttribute(pos,3)); g.setAttribute('aSpeed', new THREE.BufferAttribute(sp,1)); g.setAttribute('aSize', new THREE.BufferAttribute(sz,1));
+  return new THREE.Points(g, new THREE.ShaderMaterial({ transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, fog:false,
+    uniforms:{ uTime:TIME, uPR:{value:renderer.getPixelRatio()}, uC:{value:PAL.underLight}, uUnderV:FOG.uUnder },
+    vertexShader:`uniform float uTime,uPR; attribute float aSpeed, aSize; varying float vA;
+      void main(){ vec3 p = position; p.y = mod(p.y + uTime*aSpeed, 70.0) - 70.0; p.x += sin(uTime*0.8 + position.z)*0.5; p.z += cos(uTime*0.6 + position.x)*0.4;
+        vec4 mv = modelViewMatrix*vec4(p,1.); gl_Position = projectionMatrix*mv; gl_PointSize = aSize*uPR*(90.0/-mv.z);
+        vA = smoothstep(0.0,-4.0,p.y) * smoothstep(-70.0,-62.0,p.y) * smoothstep(90.0, 20.0, -mv.z); }`,
+    fragmentShader:`uniform vec3 uC; uniform float uUnderV; varying float vA; void main(){ vec2 c = gl_PointCoord-.5; float d = length(c); if (d>.5) discard;
+      float ring = smoothstep(.5,.40,d) * (0.25 + 0.9*smoothstep(.2,.46,d)); float a = ring*vA*0.7*uUnderV; gl_FragColor = vec4(uC*a, a); }` }));
+}
+const bubbles = makeBubbles(isMobile ? 1400 : 2600); scene.add(bubbles);
+
+/* ═════════════ GENERIC GLASS SHADER ═════════════ */
+function glassMat(base, rim, opts={}){
+  return new THREE.ShaderMaterial({ transparent: !!opts.transparent, side: opts.side || THREE.FrontSide,
+    uniforms:{ ...FOG, uBase:{value:C(base)}, uRim:{value:C(rim)}, uHover:{value:0}, uTime:TIME, uIrid:{value: opts.irid ?? 0.5} },
+    vertexShader:`varying vec3 vN; varying vec3 vW; varying vec3 vL; void main(){ vN = normalize(mat3(modelMatrix)*normal); vec4 w = modelMatrix*vec4(position,1.); vW = w.xyz; vL = position; gl_Position = projectionMatrix*viewMatrix*w; }`,
+    fragmentShader:`uniform vec3 uBase,uRim; uniform float uHover,uTime,uIrid; varying vec3 vN; varying vec3 vW; varying vec3 vL; ${FOG_GLSL}
+      void main(){ vec3 V = normalize(cameraPosition - vW); vec3 N = normalize(vN); float fr = pow(1.0 - abs(dot(N,V)), 2.2);
+        vec3 irid = 0.5 + 0.5*cos(6.2831*(vec3(0.0,0.33,0.67) + fr*0.9 + vL.y*0.05 + uTime*0.04));
+        vec3 col = uBase*(0.55 + 0.35*N.y) + mix(uRim, irid*uRim*1.6, uIrid) * fr * (1.5 + uHover*2.2);
+        col += uRim * 0.05 * (1.0 + uHover*3.0);
+        gl_FragColor = vec4(applyFog(col, vW), ${opts.transparent ? '0.55 + fr*0.45' : '1.0'}); ${OUT_GLSL} }` });
+}
+
+/* ─── canvas texture helper ─── */
+function canvasTex(w, h, draw){ const c = document.createElement('canvas'); c.width=w; c.height=h; const x = c.getContext('2d'); draw(x, w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; }
+function wrapText(x, text, X, Y, maxW, lh){ const words = text.split(' '); let line=''; for (const w of words){ const test = line + w + ' '; if (x.measureText(test).width > maxW && line){ x.fillText(line.trim(), X, Y); line = w+' '; Y += lh; } else line = test; } x.fillText(line.trim(), X, Y); return Y; }
+
+/* ═════════════ ROOM OBJECTS ═════════════ */
+const interactive = []; // {mesh, room, key, label, onHover(v)}
+const roomGroups = {};
+ROOMS.forEach(r => { roomGroups[r.id] = new THREE.Group(); scene.add(roomGroups[r.id]); });
+
+/* FRONT — WATERS House: brutalist pavilion on the water */
+// sunset environment map (generated, no image files)
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envScene = new THREE.Scene();
+envScene.add(new THREE.Mesh(new THREE.SphereGeometry(50, 48, 24), new THREE.ShaderMaterial({ side:THREE.BackSide,
+  uniforms:{ uTop:{value:PAL.skyTop}, uMid:{value:PAL.skyMid}, uHor:{value:PAL.horizon}, uSea:{value:PAL.deep}, uSun:{value:SUN}, uSunC:{value:PAL.sun} },
+  vertexShader:`varying vec3 vD; void main(){ vD = position; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader:`uniform vec3 uTop,uMid,uHor,uSea,uSun,uSunC; varying vec3 vD; void main(){ vec3 d = normalize(vD); float y = d.y;
+    vec3 c = mix(uHor, uMid, smoothstep(0.0, 0.3, y)); c = mix(c, uTop, smoothstep(0.3, 0.9, y));
+    if (y < 0.0) c = mix(uHor*0.7, uSea, smoothstep(0.0, -0.35, y));
+    float sd = max(dot(d, uSun), 0.0); c += uSunC*(pow(sd, 300.0)*30.0 + pow(sd, 8.0)*0.8);
+    gl_FragColor = vec4(c, 1.0); }` })));
+const ENV = pmrem.fromScene(envScene, 0.015).texture;
+
+function concreteTexture(){
+  const t = canvasTex(1024, 1024, (x, w, h) => {
+    x.fillStyle = '#8f8a83'; x.fillRect(0, 0, w, h);
+    for (let y = 0; y < h; y += 64){ const v = 120 + Math.random()*40; x.fillStyle = `rgba(${v},${v-4},${v-10},0.14)`; x.fillRect(0, y, w, 64);
+      for (let k = 0; k < 40; k++){ x.fillStyle = `rgba(60,55,50,${Math.random()*0.05})`; x.fillRect(Math.random()*w, y + Math.random()*64, 40 + Math.random()*200, 1 + Math.random()*2); }
+      x.fillStyle = 'rgba(30,28,26,.28)'; x.fillRect(0, y, w, 1.5); x.fillStyle = 'rgba(255,255,255,.06)'; x.fillRect(0, y+2, w, 1); }
+    for (let xx = 0; xx < w; xx += 256){ x.fillStyle = 'rgba(30,28,26,.3)'; x.fillRect(xx, 0, 2, h); }
+    for (let y = 128; y < h; y += 256) for (let xx = 64; xx < w; xx += 128){
+      x.fillStyle = 'rgba(25,22,20,.65)'; x.beginPath(); x.arc(xx, y, 6, 0, Math.PI*2); x.fill();
+      x.strokeStyle = 'rgba(255,255,255,.12)'; x.lineWidth = 1.5; x.beginPath(); x.arc(xx, y, 9, 0, Math.PI*2); x.stroke(); }
+    const img = x.getImageData(0, 0, w, h), d = img.data;
+    for (let i = 0; i < d.length; i += 4){ const n = (Math.random() - 0.5) * 26; d[i] += n; d[i+1] += n; d[i+2] += n; }
+    x.putImageData(img, 0, 0);
+    for (let k = 0; k < 26; k++){ const sx = Math.random()*w, sw = 8 + Math.random()*50; const g = x.createLinearGradient(0, 0, 0, h*0.6);
+      g.addColorStop(0, 'rgba(40,36,32,.22)'); g.addColorStop(1, 'rgba(40,36,32,0)'); x.fillStyle = g; x.fillRect(sx, 0, sw, h*0.6); }
+  });
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+}
+const CONCRETE = concreteTexture();
+const concreteMat = new THREE.MeshStandardMaterial({ map:CONCRETE, bumpMap:CONCRETE, bumpScale:1.2, roughness:0.93, metalness:0, envMap:ENV, envMapIntensity:0.8, color:0xc8c6c2 });
+const darkMat = new THREE.MeshStandardMaterial({ color:0x15181a, roughness:0.6, metalness:0.4, envMap:ENV, envMapIntensity:0.6 });
+// box with UVs scaled to real size, so the board-formed texture keeps its scale on every face
+function cBox(w, h, d, x, y, z, mat = concreteMat, tile = 9){
+  const g = new THREE.BoxGeometry(w, h, d); const uv = g.attributes.uv; const dims = [[d,h],[d,h],[w,d],[w,d],[w,h],[w,h]];
+  for (let f = 0; f < 6; f++) for (let k = 0; k < 4; k++){ const i = f*4 + k; uv.setXY(i, uv.getX(i)*dims[f][0]/tile, uv.getY(i)*dims[f][1]/tile); }
+  const m = new THREE.Mesh(g, mat); m.position.set(x, y, z); house.add(m); return m;
+}
+const HOUSE_HOVER = { value:0 };
+const WARM = C('#ffb066');
+const windowMat = (cols, seed) => new THREE.ShaderMaterial({
+  uniforms:{ ...FOG, uTime:TIME, uHover:HOUSE_HOVER, uCols:{value:cols}, uSeed:{value:seed}, uWarm:{value:WARM}, uHor:{value:PAL.horizon}, uTop:{value:PAL.skyMid} },
+  vertexShader:`varying vec2 vUv; varying vec3 vW; varying vec3 vN; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix)*normal); vec4 w = modelMatrix*vec4(position,1.); vW = w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }`,
+  fragmentShader:`uniform float uTime,uHover,uCols,uSeed; uniform vec3 uWarm,uHor,uTop; varying vec2 vUv; varying vec3 vW; varying vec3 vN; ${FOG_GLSL}
+    float h1(float n){ return fract(sin(n*127.1 + uSeed*31.7)*43758.5453); }
+    void main(){ vec2 uv = vUv; float cx = floor(uv.x*uCols); float fx = fract(uv.x*uCols);
+      float mull = step(fx, 0.035) + step(0.965, fx) + step(abs(uv.y - 0.9), 0.012) + step(uv.y, 0.02) + step(0.985, uv.y);
+      float room = 0.45 + 0.55*h1(cx);
+      vec3 inside = uWarm * room * (0.45 + 0.75*smoothstep(0.0, 1.0, uv.y));
+      inside += uWarm * smoothstep(0.84, 0.95, uv.y) * 1.3 * step(0.25, h1(cx+5.0));
+      float fh = 0.14 + 0.22*h1(cx+7.0); float f0 = 0.15 + 0.3*h1(cx+3.0);
+      float furn = step(uv.y, fh) * step(f0, fx) * step(fx, f0 + 0.35 + 0.2*h1(cx+9.0)) * step(0.35, h1(cx+11.0));
+      float tall = step(uv.y, 0.55) * step(abs(fx - 0.8), 0.04) * step(0.75, h1(cx+17.0));
+      inside *= 1.0 - (furn + tall)*0.8;
+      vec2 lp = vec2(fx - 0.5, (uv.y - 0.7)*1.8); inside += uWarm * smoothstep(0.09, 0.0, length(lp)) * 3.0 * step(0.55, h1(cx+21.0));
+      inside *= (1.0 + uHover*0.7) * (0.94 + 0.06*sin(uTime*0.6 + cx*1.7));
+      vec3 V = normalize(cameraPosition - vW); float fr = pow(1.0 - max(dot(normalize(vN), V), 0.0), 3.0);
+      vec3 col = mix(inside, mix(uHor, uTop, 0.35), 0.12 + fr*0.55);
+      col = mix(col, vec3(0.025, 0.027, 0.03), clamp(mull, 0.0, 1.0));
+      gl_FragColor = vec4(applyFog(col, vW), 1.0); ${OUT_GLSL} }` });
+
+const house = new THREE.Group(); house.position.copy(HOUSE_POS); house.rotation.y = HOUSE_ROT; roomGroups.front.add(house);
+// plinth / deck
+cBox(36, 2.2, 19, 0, 0.1, 0);
+// steps into the water
+for (let k = 0; k < 4; k++) cBox(9, 0.45, 1.3, -10, 0.9 - k*0.5, 10.1 + k*1.3);
+// lower glass volume
+const gw = 16, gh = 5.4, gd = 10, gx = -6, gz = -1.5, gy = 1.2;
+const front = new THREE.Mesh(new THREE.PlaneGeometry(gw, gh), windowMat(8, 1)); front.position.set(gx, gy + gh/2, gz + gd/2); house.add(front);
+const side = new THREE.Mesh(new THREE.PlaneGeometry(gd, gh), windowMat(5, 2)); side.position.set(gx + gw/2, gy + gh/2, gz); side.rotation.y = Math.PI/2; house.add(side);
+const side2 = side.clone(); side2.position.x = gx - gw/2; side2.rotation.y = -Math.PI/2; house.add(side2);
+cBox(gw - 0.2, gh, 0.6, gx, gy + gh/2, gz - gd/2 + 0.3, darkMat);
+// columns (pilotis)
+[[9, 5], [9, -5], [15, 5], [15, -5]].forEach(([x, z]) => cBox(0.9, 5.4, 0.9, x, 3.9, z));
+// cantilevered upper volume
+const up = cBox(32, 4.6, 14, 1, 8.9, -0.5);
+const strip = new THREE.Mesh(new THREE.PlaneGeometry(26, 1.3), windowMat(13, 3)); strip.position.set(1, 8.8, 6.53); house.add(strip);
+cBox(26.6, 0.35, 0.5, 1, 8.0, 6.6); cBox(26.6, 0.35, 0.5, 1, 9.6, 6.6);
+// thin roof slab with deep overhang
+cBox(34, 0.45, 16.5, 0.5, 11.42, -0.2);
+// downlights under the cantilever
+const dlMat = new THREE.MeshBasicMaterial({ color:new THREE.Color(3.2, 2.2, 1.3), toneMapped:false });
+for (let x = -13; x <= 15; x += 4) for (const z of [3.2, 5.6]) { const d = new THREE.Mesh(new THREE.CircleGeometry(0.22, 16), dlMat); d.rotation.x = Math.PI/2; d.position.set(x, 6.58, z); house.add(d); }
+// tall fin wall (left) and freestanding brand wall (right)
+cBox(1.4, 15, 12, -17.6, 6.4, -2);
+const brandWall = cBox(11, 9.5, 1.1, 19.8, 4.9, 4.6);
+const makeBrandTex = () => canvasTex(2048, 600, (x, w, h) => {
+  x.clearRect(0, 0, w, h); x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.font = '800 300px Syne'; x.shadowColor = 'rgba(255,190,120,1)'; x.shadowBlur = 60; x.fillStyle = 'rgba(255,214,170,1)'; x.fillText('WATERS', w/2, h/2 + 10);
+  x.shadowBlur = 0; x.fillStyle = '#fff3e4'; x.fillText('WATERS', w/2, h/2 + 10);
+});
+const brandMat = new THREE.MeshBasicMaterial({ map:makeBrandTex(), transparent:true, depthWrite:false, toneMapped:false, color:new THREE.Color(1.5, 1.4, 1.3) });
+const brand = new THREE.Mesh(new THREE.PlaneGeometry(10, 2.93), brandMat); brand.position.set(19.8, 6.3, 5.18); house.add(brand);
+const brandLine = new THREE.Mesh(new THREE.PlaneGeometry(6, 0.05), new THREE.MeshBasicMaterial({ color:new THREE.Color(2, 1.6, 1.2), toneMapped:false })); brandLine.position.set(19.8, 4.4, 5.18); house.add(brandLine);
+// infinity pool with overflow edge
+const POOL_GLSL = `float caustic(vec2 uv, float t){ const float TAU = 6.28318530718; vec2 p = mod(uv*TAU, TAU) - 250.0; vec2 i = p; float c = 1.0; float inten = 0.005;
+    for (int n = 0; n < 4; n++){ float tt = t * (1.0 - (3.5 / float(n+1))); i = p + vec2(cos(tt - i.x) + sin(tt + i.y), sin(tt - i.y) + cos(tt + i.x));
+      c += 1.0/length(vec2(p.x / (sin(i.x+tt)/inten), p.y / (cos(i.y+tt)/inten))); } c /= 4.0; c = 1.17 - pow(c, 1.4); return pow(abs(c), 8.0); }`;
+const pool = new THREE.Mesh(new THREE.PlaneGeometry(13, 6.5), new THREE.ShaderMaterial({
+  uniforms:{ ...FOG, uTime:TIME, uA:{value:C('#0a7f92')}, uB:{value:C('#a6fbff')} },
+  vertexShader:`varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix*vec4(position,1.); vW = w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }`,
+  fragmentShader:`uniform float uTime; uniform vec3 uA,uB; varying vec2 vUv; varying vec3 vW; ${FOG_GLSL} ${POOL_GLSL}
+    void main(){ float c = caustic(vUv*vec2(2.0,1.0)*1.2, uTime*0.4); float edge = smoothstep(0.0, 0.08, vUv.x)*smoothstep(1.0, 0.92, vUv.x)*smoothstep(0.0,0.1,vUv.y);
+      vec3 col = mix(uA*0.6, uA*1.6, edge) + uB*c*0.9; gl_FragColor = vec4(applyFog(col, vW), 1.0); ${OUT_GLSL} }` }));
+pool.rotation.x = -Math.PI/2; pool.position.set(8.5, 1.24, 5.8); house.add(pool);
+cBox(13.8, 0.25, 0.4, 8.5, 1.32, 2.4, concreteMat); cBox(0.4, 0.25, 7.2, 1.8, 1.32, 5.8, concreteMat); cBox(0.4, 0.25, 7.2, 15.2, 1.32, 5.8, concreteMat);
+const fall = new THREE.Mesh(new THREE.PlaneGeometry(13, 2.1), new THREE.ShaderMaterial({ transparent:true, depthWrite:false,
+  uniforms:{ uTime:TIME, uC:{value:C('#bff8ff')} },
+  vertexShader:`varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader:`uniform float uTime; uniform vec3 uC; varying vec2 vUv; float h(float n){ return fract(sin(n*91.7)*43758.5); }
+    void main(){ float col = floor(vUv.x*70.0); float s = fract(vUv.y*2.5 + uTime*(1.4 + h(col)*0.8) + h(col+3.0));
+      float a = (0.25 + 0.55*smoothstep(0.6, 1.0, s)) * smoothstep(0.0, 0.25, vUv.y) * (0.6 + 0.4*h(col+7.0));
+      a = a*0.6 + smoothstep(0.25, 0.0, vUv.y)*0.25; gl_FragColor = vec4(uC*a*0.9, a); ${OUT_GLSL} }` }));
+fall.position.set(8.5, 0.15, 9.53); house.add(fall);
+// chrome sphere sculpture on a plinth (homage to the drop)
+cBox(1.6, 1.2, 1.6, -1.2, 1.8, 6.2);
+const orb = new THREE.Mesh(new THREE.SphereGeometry(1.25, 64, 32), new THREE.MeshStandardMaterial({ color:0xffffff, metalness:1, roughness:0.04, envMap:ENV, envMapIntensity:1.4 }));
+orb.position.set(-1.2, 3.65, 6.2); house.add(orb);
+// warm light spilling on the deck
+const warmA = new THREE.PointLight(0xffa860, 40, 26, 1.6); warmA.position.set(-6, 4.5, 7); house.add(warmA);
+const warmB = new THREE.PointLight(0xffa860, 30, 22, 1.6); warmB.position.set(10, 5.5, 4); house.add(warmB);
+const brandL = new THREE.PointLight(0xffc28a, 20, 14, 1.8); brandL.position.set(19.8, 6.5, 8); house.add(brandL);
+// light reflections on the ocean (follow the same waves)
+const reflMat = new THREE.ShaderMaterial({ transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+  uniforms:{ ...WAVE_U, uC:{value:WARM}, uHover:HOUSE_HOVER },
+  vertexShader:`${WAVE_GLSL} varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix*vec4(position,1.); w.y += H(w.xz) + 0.07; vW = w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }`,
+  fragmentShader:`uniform float uTime, uHover; uniform vec3 uC; varying vec2 vUv; varying vec3 vW;
+    void main(){ float s = 0.5 + 0.5*sin(vW.x*2.6 + sin(vW.z*0.6 + uTime*0.9)*2.2); float n = 0.5 + 0.5*sin(vW.z*1.9 - uTime*1.7 + vW.x*0.7);
+      float a = pow(s*n, 2.5) * pow(vUv.y, 1.6) * smoothstep(0.0, 0.2, vUv.x) * smoothstep(1.0, 0.8, vUv.x) * (0.75 + uHover*0.4);
+      gl_FragColor = vec4(uC*a*1.3, a); }` });
+[[-6, 16, 22], [1, 26, 18], [22, 9, 14]].forEach(([x, w, len]) => { const g = new THREE.PlaneGeometry(w, len, Math.ceil(w/1.5), 40); g.rotateX(-Math.PI/2);
+  const m = new THREE.Mesh(g, reflMat); m.position.set(x, 0, 9.6 + len/2); m.renderOrder = 2; house.add(m); });
+// click target
+const houseHit = new THREE.Mesh(new THREE.BoxGeometry(46, 16, 22), new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthWrite:false }));
+houseHit.position.set(2, 6, 1); house.add(houseHit);
+const houseIx = { uniforms:{ uHover:HOUSE_HOVER } };
+interactive.push({ mesh:houseHit, room:'front', label:'Entrar', action:()=>goTo('101'), mat:houseIx });
+interactive.push({ mesh:houseHit, room:'contacto', label:'Entrar', action:()=>goTo('101'), mat:houseIx });
+
+/* 101 — monoliths */
+const MONO = [ ['01','CLARIDAD','Qué vendes, a quién, por qué tú.','claridad'], ['02','CORRIENTE','Constancia convertida en sistema.','corriente'], ['03','PROFUNDIDAD','Comunidad, datos y retención.','profundidad'] ];
+const monoliths = [];
+function buildMonoliths(){
+  MONO.forEach(([n, t, s, key], i) => {
+    const g = new THREE.Group(); g.position.set((i-1)*8.2, -20, -(Math.abs(i-1))*1.6); g.rotation.y = -(i-1)*0.22;
+    const mat = glassMat('#06273a', i===1 ? '#a78bfa' : '#5ef2ff', { irid:0.6 });
+    const body = new THREE.Mesh(new RoundedBoxGeometry(5.2, 8.6, 0.9, 6, 0.45), mat); g.add(body);
+    const tex = canvasTex(520, 860, (x,w,h) => {
+      x.clearRect(0,0,w,h); x.strokeStyle='rgba(158,232,239,.35)'; x.lineWidth=2; x.strokeRect(30,30,w-60,h-60);
+      x.font='500 26px "JetBrains Mono"'; x.fillStyle='#5ef2ff'; x.fillText('WATERS 101', 60, 92);
+      x.font='800 250px Syne'; x.lineWidth=3; x.strokeStyle='rgba(94,242,255,.9)'; x.strokeText(n, 48, 400);
+      x.font='800 64px Syne'; x.fillStyle='#ffffff'; x.fillText(t, 60, 560);
+      x.font='400 32px Manrope'; x.fillStyle='rgba(220,245,250,.85)'; wrapText(x, s, 60, 620, w-120, 44);
+      x.font='500 24px "JetBrains Mono"'; x.fillStyle='#5ef2ff'; x.fillText('TOCA PARA ABRIR  →', 60, h-70);
+    });
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(5.0, 8.27), new THREE.MeshBasicMaterial({ map:tex, transparent:true, depthWrite:false }));
+    face.position.z = 0.47; g.add(face);
+    g.userData = { baseY: g.position.y, phase: i*1.7 }; roomGroups['101'].add(g); monoliths.push(g);
+    interactive.push({ mesh:body, room:'101', label:'Abrir', action:()=>openDetail(key), mat, group:g, key });
+  });
+  // base platform ring
+  const ring = new THREE.Mesh(new THREE.RingGeometry(13, 13.15, 128), new THREE.MeshBasicMaterial({ color:0x5ef2ff, transparent:true, opacity:.35, side:THREE.DoubleSide }));
+  ring.rotation.x = -Math.PI/2; ring.position.set(0,-25.2,-1); roomGroups['101'].add(ring);
+}
+
+/* STRATEGY — funnel */
+const funnel = new THREE.Group(); funnel.position.set(-30, -38, -10); roomGroups['marketing-strategy'].add(funnel);
+const STAGES = [ ['01','SUPERFICIE','superficie','#5ef2ff',8.0], ['02','CORRIENTE','corriente-s','#7fd8ff',6.2], ['03','INMERSIÓN','inmersion','#a78bfa',4.4], ['04','ABISMO','abismo','#ff7ac6',2.6] ];
+const stageObjs = [];
+function buildFunnel(){
+  STAGES.forEach(([n, t, key, col, r], i) => {
+    const y = 5.4 - i*3.6; const g = new THREE.Group(); g.position.y = y; funnel.add(g);
+    const mat = glassMat('#05202f', col, { irid:0.35 });
+    const torus = new THREE.Mesh(new THREE.TorusGeometry(r, 0.22, 24, 200), mat); torus.rotation.x = Math.PI/2; g.add(torus);
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(r, 96), new THREE.MeshBasicMaterial({ color:col, transparent:true, opacity:0.05, side:THREE.DoubleSide, depthWrite:false }));
+    disc.rotation.x = -Math.PI/2; g.add(disc);
+    const orbs = []; const count = 10 - i*2;
+    for (let k=0;k<count;k++){ const o = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 12), new THREE.MeshBasicMaterial({ color:col })); o.userData.a = k/count*Math.PI*2; g.add(o); orbs.push(o); }
+    const hit = new THREE.Mesh(new THREE.CylinderGeometry(r+0.6, r+0.6, 2.8, 32, 1, true), new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthWrite:false, side:THREE.DoubleSide }));
+    g.add(hit);
+    const lbl = new THREE.Sprite(new THREE.SpriteMaterial({ map: canvasTex(640, 140, (x,w,h)=>{ x.font='500 34px "JetBrains Mono"'; x.fillStyle=col; x.fillText(n, 6, 60); x.font='800 62px Syne'; x.fillStyle='#ffffff'; x.fillText(t, 90, 66); x.fillStyle=col; x.fillRect(6, 100, 80, 3); }), transparent:true, depthWrite:false }));
+    lbl.scale.set(6.4, 1.4, 1); lbl.position.set(r + 4.2, 0.3, 0); g.add(lbl);
+    g.userData = { orbs, speed: 0.25 + i*0.12, r };
+    stageObjs.push(g);
+    interactive.push({ mesh:hit, room:'marketing-strategy', label:'Ver etapa', action:()=>openDetail(key), mat, group:g, key });
+  });
+  // core beam
+  const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 18, 8), new THREE.MeshBasicMaterial({ color:0xbff9ff, transparent:true, opacity:.6 }));
+  beam.position.y = 0; funnel.add(beam);
+  const core = new THREE.Mesh(new THREE.SphereGeometry(0.7, 24, 24), new THREE.MeshBasicMaterial({ color:0xffffff })); core.position.y = -6.6; funnel.add(core); funnel.userData.core = core;
+}
+
+/* STUDIO — card carousel */
+const carousel = new THREE.Group(); carousel.position.set(30, -50, -10); roomGroups.studio.add(carousel);
+const CARDS = [ ['01','Branding fluido','Identidad, voz y sistema visual que se adapta a cada canal.','branding','#5ef2ff'], ['02','Web & 3D','Experiencias que la gente comparte. Como esta.','web3d','#7fd8ff'], ['03','Contenido & Reels','Producción con sistema: guion, grabación y edición.','contenido','#a78bfa'], ['04','Paid Media','Meta, Google y TikTok Ads con cada dólar medido.','ads','#ff9e7a'], ['05','Automatización IA','Agentes que responden, califican y venden 24/7.','ia','#ff7ac6'] ];
+const cardMeshes = [];
+function buildCarousel(){
+  const R = 9.5;
+  CARDS.forEach(([n, t, s, key, col], i) => {
+    const tex = canvasTex(600, 820, (x,w,h)=>{
+      const g = x.createLinearGradient(0,0,w,h); g.addColorStop(0,'rgba(10,48,70,0.96)'); g.addColorStop(1,'rgba(3,14,28,0.96)');
+      x.fillStyle = g; x.beginPath(); x.roundRect(4,4,w-8,h-8,44); x.fill();
+      x.strokeStyle = col; x.globalAlpha = .7; x.lineWidth = 3; x.stroke(); x.globalAlpha = 1;
+      const rg = x.createRadialGradient(w*0.8, h*0.2, 10, w*0.8, h*0.2, 360); rg.addColorStop(0, col+'55'); rg.addColorStop(1, 'transparent'); x.fillStyle = rg; x.fillRect(0,0,w,h);
+      x.font='500 26px "JetBrains Mono"'; x.fillStyle=col; x.fillText('STUDIO / '+n, 50, 86);
+      x.font='800 200px Syne'; x.lineWidth=2.5; x.strokeStyle=col; x.globalAlpha=.55; x.strokeText(n, 40, 330); x.globalAlpha=1;
+      x.font='800 64px Syne'; x.fillStyle='#ffffff'; let yy = wrapText(x, t, 50, 500, w-100, 68);
+      x.font='400 30px Manrope'; x.fillStyle='rgba(220,245,250,.82)'; wrapText(x, s, 50, yy+60, w-100, 42);
+      x.font='500 24px "JetBrains Mono"'; x.fillStyle=col; x.fillText('ABRIR  →', 50, h-60);
+    });
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 6.0), new THREE.MeshBasicMaterial({ map:tex, transparent:true, side:THREE.FrontSide, depthWrite:false }));
+    const a = i/CARDS.length*Math.PI*2; m.position.set(Math.sin(a)*R, 0, Math.cos(a)*R); m.rotation.y = a;
+    m.userData = { a, phase:i };
+    carousel.add(m); cardMeshes.push(m);
+    interactive.push({ mesh:m, room:'studio', label:'Abrir', action:()=>openDetail(key), group:m, key });
+  });
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(R, 0.03, 8, 200), new THREE.MeshBasicMaterial({ color:0x5ef2ff, transparent:true, opacity:.4 }));
+  ring.rotation.x = Math.PI/2; ring.position.y = -3.6; carousel.add(ring);
+}
+
+/* LAB — particle jellyfish */
+const jelly = new THREE.Group(); jelly.position.set(0, -58, -24); roomGroups.lab.add(jelly);
+const jellyU = { uTime:TIME, uPulse:{value:0}, uPR:{value:renderer.getPixelRatio()}, uA:{value:PAL.aqua}, uB:{value:PAL.pink}, uV:{value:PAL.violet} };
+function buildJelly(){
+  const BELL = isMobile ? 2600 : 4200, STR = 18, PER = isMobile ? 120 : 210; const N = BELL + STR*PER;
+  const pos = new Float32Array(N*3), aT = new Float32Array(N), aA = new Float32Array(N), aB = new Float32Array(N), aR = new Float32Array(N);
+  for (let i=0;i<BELL;i++){ aT[i]=0; aA[i]=Math.random()*Math.PI*2; aB[i]=Math.acos(1 - Math.random()) ; aR[i]=Math.random(); }
+  for (let s=0;s<STR;s++) for (let k=0;k<PER;k++){ const i = BELL + s*PER + k; aT[i]=1; aA[i]=s/STR*Math.PI*2 + (s%2)*0.1; aB[i]=k/PER; aR[i]=Math.random(); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  g.setAttribute('aT', new THREE.BufferAttribute(aT,1)); g.setAttribute('aA', new THREE.BufferAttribute(aA,1)); g.setAttribute('aB', new THREE.BufferAttribute(aB,1)); g.setAttribute('aR', new THREE.BufferAttribute(aR,1));
+  g.boundingSphere = new THREE.Sphere(new THREE.Vector3(0,-6,0), 20);
+  const m = new THREE.ShaderMaterial({ transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, uniforms:jellyU, fog:false,
+    vertexShader:`uniform float uTime,uPulse,uPR; attribute float aT,aA,aB,aR; varying vec3 vC; varying float vAlpha; uniform vec3 uA,uB,uV;
+      void main(){ vec3 p; float pulse = 0.5 + 0.5*sin(uTime*2.0); float size;
+        if (aT < 0.5){ float th = aB; float r = 5.0*(1.0 + 0.10*sin(uTime*2.0 - th*3.0) + uPulse*0.35);
+          float squash = 1.0 + 0.16*pulse; p = vec3(sin(th)*cos(aA)*r*squash, cos(th)*r*0.72 - th*0.4, sin(th)*sin(aA)*r*squash);
+          p += normalize(p+vec3(0.0001))*sin(aR*40.0 + uTime*1.5)*0.12;
+          vC = mix(uA, uB, smoothstep(0.2, 1.57, th)); size = 1.6 + aR*1.2; vAlpha = 0.55 + 0.45*smoothstep(1.1,1.57,th);
+        } else { float s = aB; float rr = 4.6*(1.0 + 0.16*pulse) * (1.0 - s*0.45);
+          p = vec3(cos(aA)*rr, -1.2 - s*16.0, sin(aA)*rr);
+          p.x += sin(uTime*1.5 + s*5.0 + aA*2.0)*s*2.4; p.z += cos(uTime*1.2 + s*4.0 + aA)*s*2.0; p.y += sin(uTime*2.0 - s*6.0)*0.4*s;
+          vC = mix(uB, uV, s); size = 1.3 * (1.0 - s*0.6) + aR*0.5; vAlpha = (1.0 - s)*0.9; }
+        vec4 mv = modelViewMatrix*vec4(p,1.); gl_Position = projectionMatrix*mv; gl_PointSize = size*uPR*(40.0/-mv.z)*(1.0+uPulse*0.6); }`,
+    fragmentShader:`varying vec3 vC; varying float vAlpha; uniform float uPulse; void main(){ vec2 c = gl_PointCoord - .5; float d = length(c); if (d > .5) discard; float a = pow(1.0 - d*2.0, 1.6) * vAlpha; gl_FragColor = vec4(vC*(1.4+uPulse)*a, a); }` });
+  const pts = new THREE.Points(g, m); jelly.add(pts);
+  const hit = new THREE.Mesh(new THREE.SphereGeometry(6.5, 16, 16), new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthWrite:false }));
+  jelly.add(hit);
+  interactive.push({ mesh:hit, room:'lab', label:'Tócala', action:()=>{ gsap.fromTo(jellyU.uPulse, {value:1}, {value:0, duration:1.6, ease:'power2.out'}); SOUND.bloop(); } });
+}
+
+/* ═════════════ POSTPROCESSING ═════════════ */
+let composer = null, bloom = null;
+if (!isMobile){
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.55, 0.6, 0.78);
+  composer.addPass(bloom);
+  composer.addPass(new OutputPass());
+}
+
+/* ═════════════ CAMERA STATE & NAV ═════════════ */
+const camPos = new THREE.Vector3(0, 40, 90), camTgt = new THREE.Vector3(0, 4, -10);
+const view = { sx: ROOMS[0].shift[0], sy: 0 }; const pull = { v:1 };
+const mouse = new THREE.Vector2(), mouseS = new THREE.Vector2();
+let current = 0, busy = false, entered = false;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+
+function applyViewOffset(){
+  const w = innerWidth, h = innerHeight;
+  const sx = isMobile ? 0 : view.sx, sy = isMobile ? (current === 0 ? 0.04 : 0.2) : 0;
+  camera.setViewOffset(w, h, w*sx, h*sy, w, h);
+}
+function goTo(id, instant=false){
+  const i = typeof id === 'number' ? id : idxOf(id);
+  if (i < 0 || i >= ROOMS.length) return;
+  if (i === current && !instant && entered) { closeDetail(); return; }
+  closeDetail(); closeMenu();
+  const prev = current; current = i; const R = ROOMS[i];
+  const dur = instant ? 0 : (Math.abs(i-prev) > 2 ? 3.0 : 2.4);
+  busy = !instant; setTimeout(()=> busy = false, dur*1000*0.75);
+  gsap.to(camPos, { x:R.cam[0], y:R.cam[1], z:R.cam[2], duration:dur, ease:'power3.inOut' });
+  gsap.to(camTgt, { x:R.tgt[0], y:R.tgt[1], z:R.tgt[2], duration:dur, ease:'power3.inOut' });
+  gsap.to(view, { sx:R.shift[0], duration:dur, ease:'power3.inOut' });
+  gsap.to(pull, { v:R.noPull ? 0 : 1, duration:dur, ease:'power3.inOut' });
+  $$('.room').forEach(el => el.classList.toggle('active', el.dataset.room === R.id));
+  $$('[data-go]').forEach(a => a.classList.toggle('active', a.dataset.go === R.id && R.id !== 'front'));
+  $$('#mmenu .ex-card').forEach(a => a.classList.toggle('active', a.dataset.go === R.id));
+  movePill();
+  $('#roomNum').textContent = String(i).padStart(2,'0'); $('#roomName').textContent = R.name;
+  $('#scrollTxt').textContent = i === 0 ? 'Scroll para sumergirte' : (i === ROOMS.length-1 ? 'Scroll arriba para volver' : 'Scroll para seguir bajando');
+  try { if (location.hash.slice(1) !== R.id) history.replaceState(null, '', '#'+R.id); } catch(e) {}
+  if (!instant) SOUND.whoosh();
+}
+function next(){ if (!busy) goTo(Math.min(current+1, ROOMS.length-1)); }
+function prev(){ if (!busy) goTo(Math.max(current-1, 0)); }
+function movePill(){
+  const a = $('#nav a.active'), pill = $('#navPill');
+  if (!a){ pill.style.width = '0px'; pill.style.opacity = 0; return; }
+  pill.style.opacity = 1; pill.style.left = a.offsetLeft + 'px'; pill.style.width = a.offsetWidth + 'px';
+}
+
+/* ═════════════ DETAIL DRAWER ═════════════ */
+let detailOpen = false;
+function openDetail(key){
+  const d = DETAILS[key]; if (!d) return;
+  if (ROOMS[current].id !== d.room) goTo(d.room);
+  $('#dEyebrow').textContent = d.eyebrow;
+  const secs = d.sections.map(s => `<h4>${s.h}</h4><ul>${s.items.map(it=>`<li>${it}</li>`).join('')}</ul>`).join('');
+  const kp = d.kpis ? `<h4>Métricas & datos</h4><div class="kpis">${d.kpis.map(([a,b])=>`<div class="kpi"><span>${a}</span><b>${b}</b></div>`).join('')}</div>` : '';
+  const ROOM_IMG = { '101':'101', 'marketing-strategy':'strategy', studio:'studio', lab:'lab' };
+  $('#dBody').innerHTML = `<div class="d-photo"><img src="img/${ROOM_IMG[d.room]}.webp" alt=""></div><div class="d-num">${d.n}</div><h3>${d.title}</h3><p class="quote">${d.quote}</p>${secs}${kp}
+    <div class="d-foot"><button class="btn solid" data-go="contacto">Quiero esto para mi marca →</button><button class="btn" id="dBack">Cerrar</button></div>`;
+  $('#dBack').onclick = closeDetail;
+  $('#drawer').classList.add('open'); $('#veil').classList.add('open'); $('#drawer').setAttribute('aria-hidden','false'); detailOpen = true;
+  $$('.list button').forEach(b => b.classList.toggle('hl', b.dataset.detail === key));
+  const it = interactive.find(o => o.key === key); if (it && it.group) gsap.fromTo(it.group.scale, {x:1.12,y:1.12,z:1.12}, {x:1,y:1,z:1,duration:1.2,ease:'elastic.out(1,.5)'});
+  SOUND.bloop();
+}
+function closeDetail(){ if (!detailOpen) return; $('#drawer').classList.remove('open'); $('#veil').classList.remove('open'); $('#drawer').setAttribute('aria-hidden','true'); detailOpen = false; $$('.list button').forEach(b => b.classList.remove('hl')); }
+
+/* ═════════════ SOUND (Web Audio, generative) ═════════════ */
+const SOUND = (() => {
+  let ctx, master, filt, on = false, under = false;
+  function init(){
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+    filt = ctx.createBiquadFilter(); filt.type = 'lowpass'; filt.frequency.value = 1400; filt.Q.value = 0.6; filt.connect(master);
+    const len = ctx.sampleRate*4, buf = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c=0;c<2;c++){ const d = buf.getChannelData(c); let last = 0; for (let i=0;i<len;i++){ const w = Math.random()*2-1; last = (last + 0.02*w)/1.02; d[i] = last*3.2; } }
+    const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+    const swell = ctx.createGain(); swell.gain.value = 0.55; src.connect(swell); swell.connect(filt);
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.11; const lfoG = ctx.createGain(); lfoG.gain.value = 0.35; lfo.connect(lfoG); lfoG.connect(swell.gain); lfo.start();
+    [55, 82.4, 110.2].forEach((f,i) => { const o = ctx.createOscillator(); o.type='sine'; o.frequency.value=f; const g = ctx.createGain(); g.gain.value = 0.035/(i+1); o.connect(g); g.connect(filt); o.start(); });
+    src.start();
+  }
+  return {
+    toggle(force){ try { if (!ctx) init(); on = force ?? !on; if (ctx.state === 'suspended') ctx.resume();
+      master.gain.cancelScheduledValues(ctx.currentTime); master.gain.linearRampToValueAtTime(on ? 0.5 : 0, ctx.currentTime + 0.8);
+      document.body.classList.toggle('sound-on', on); } catch(e) { on = false; } },
+    setUnder(u, depth){ if (!ctx || !on) return; const f = u ? 260 + (1-depth)*260 : 1400; filt.frequency.setTargetAtTime(f, ctx.currentTime, 0.4); },
+    bloop(){ if (!ctx || !on) return; const o = ctx.createOscillator(), g = ctx.createGain(); o.type='sine'; o.frequency.setValueAtTime(620, ctx.currentTime); o.frequency.exponentialRampToValueAtTime(160, ctx.currentTime+0.25);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime+0.02); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.35); o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime+0.4); },
+    whoosh(){ if (!ctx || !on) return; const n = ctx.createBufferSource(); const b = ctx.createBuffer(1, ctx.sampleRate*1.6, ctx.sampleRate); const d = b.getChannelData(0); for (let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/d.length);
+      n.buffer = b; const f = ctx.createBiquadFilter(); f.type='bandpass'; f.Q.value=0.8; f.frequency.setValueAtTime(300, ctx.currentTime); f.frequency.exponentialRampToValueAtTime(1600, ctx.currentTime+0.8); f.frequency.exponentialRampToValueAtTime(200, ctx.currentTime+1.6);
+      const g = ctx.createGain(); g.gain.value = 0.12; n.connect(f); f.connect(g); g.connect(ctx.destination); n.start(); },
+    get on(){ return on; }
+  };
+})();
+
+/* ═════════════ INPUT ═════════════ */
+const raycaster = new THREE.Raycaster(); const ndc = new THREE.Vector2(); let hovered = null;
+const cursor = $('#cursor'), cdot = $('#cursor-dot'); const cur = { x:innerWidth/2, y:innerHeight/2, tx:innerWidth/2, ty:innerHeight/2 };
+if (matchMedia('(pointer:fine)').matches) document.body.classList.add('has-cursor');
+
+addEventListener('pointermove', e => {
+  mouse.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1); ndc.copy(mouse);
+  cur.tx = e.clientX; cur.ty = e.clientY; cdot.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+});
+function pick(){
+  if (!entered || detailOpen) return null;
+  raycaster.setFromCamera(ndc, camera);
+  const id = ROOMS[current].id; const list = interactive.filter(o => o.room === id);
+  const hits = raycaster.intersectObjects(list.map(o=>o.mesh), false);
+  return hits.length ? list.find(o => o.mesh === hits[0].object) : null;
+}
+canvas.addEventListener('click', e => {
+  ndc.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1);
+  const h = pick(); if (h){ h.action(); return; }
+  // ripple on water when above surface
+  if (camera.position.y > 0){
+    raycaster.setFromCamera(ndc, camera); const p = new THREE.Vector3();
+    if (raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0), 0), p)) { addRipple(p.x, p.z, 1); SOUND.bloop(); }
+  }
+});
+let wheelAcc = 0, wheelT = 0;
+addEventListener('wheel', e => {
+  if (!entered || detailOpen || e.target.closest('.panel-card, #drawer, #mmenu')) return;
+  const now = performance.now(); if (now - wheelT > 260) wheelAcc = 0; wheelT = now; wheelAcc += e.deltaY;
+  if (wheelAcc > 70){ wheelAcc = 0; next(); } else if (wheelAcc < -70){ wheelAcc = 0; prev(); }
+}, { passive:true });
+let ty0 = null;
+canvas.addEventListener('touchstart', e => { ty0 = e.touches[0].clientY; }, { passive:true });
+canvas.addEventListener('touchend', e => { if (ty0 === null) return; const dy = ty0 - e.changedTouches[0].clientY; if (Math.abs(dy) > 60) dy > 0 ? next() : prev(); ty0 = null; }, { passive:true });
+addEventListener('keydown', e => {
+  if (!entered || e.target.closest('input,textarea,select')) return;
+  if (e.key === 'Escape') { closeDetail(); closeMenu(); }
+  if (detailOpen) return;
+  if (['ArrowDown','PageDown','ArrowRight'].includes(e.key)) { e.preventDefault(); next(); }
+  if (['ArrowUp','PageUp','ArrowLeft'].includes(e.key)) { e.preventDefault(); prev(); }
+});
+document.addEventListener('click', e => {
+  const go = e.target.closest('[data-go]'); if (go){ e.preventDefault(); goTo(go.dataset.go); return; }
+  const det = e.target.closest('[data-detail]'); if (det){ openDetail(det.dataset.detail); return; }
+});
+document.addEventListener('mouseover', e => { if (e.target.closest('a,button,label,input,textarea,select')) cursor.style.borderColor = '#5ef2ff'; });
+document.addEventListener('mouseout', e => { if (e.target.closest('a,button,label,input,textarea,select')) cursor.style.borderColor = ''; });
+$('#veil').onclick = closeDetail; $('#dClose').onclick = closeDetail;
+$('#prevBtn').onclick = prev; $('#nextBtn').onclick = next;
+$('#soundBtn').onclick = () => SOUND.toggle();
+const closeMenu = () => $('#mmenu').classList.remove('open');
+$('#burger').onclick = () => $('#mmenu').classList.toggle('open');
+$('#exploreBtn').onclick = () => $('#mmenu').classList.toggle('open');
+addEventListener('hashchange', () => { const id = location.hash.slice(1); if (entered && id && id !== ROOMS[current].id) goTo(id); });
+
+/* ═════════════ CONTACT FORM ═════════════ */
+$('#contactEmail').innerHTML = `<a href="mailto:${CONFIG.email}">${CONFIG.email}</a>`;
+$('#yr').textContent = new Date().getFullYear();
+$('#contactForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.target, st = $('#formStatus'), btn = $('#sendBtn');
+  const data = { name:f.name.value.trim(), email:f.email.value.trim(), message:f.message.value.trim(), company:f.company.value, services:[...f.querySelectorAll('[name=services]:checked')].map(c=>c.value) };
+  st.className = 'form-status';
+  if (!data.name || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email) || data.message.length < 10){ st.classList.add('err'); st.textContent = 'Completa nombre, un email válido y un mensaje (mín. 10 caracteres).'; return; }
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  try {
+    const r = await fetch(CONFIG.contactEndpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+    const j = await r.json().catch(()=> ({}));
+    if (r.ok && j.ok){ st.classList.add('ok'); st.textContent = '✓ Mensaje recibido. Te escribimos en menos de 24 horas.'; f.reset(); addRipple(0, -10, 1.4); SOUND.bloop(); }
+    else { st.classList.add('err'); st.textContent = j.error || 'No se pudo enviar. Escríbenos a ' + CONFIG.email; }
+  } catch(err){
+    st.classList.add('err'); st.textContent = 'Vista previa: el envío se activa cuando la página corre en Vercel. Mientras tanto: ' + CONFIG.email;
+  } finally { btn.disabled = false; btn.textContent = 'Enviar mensaje →'; }
+});
+
+/* ═════════════ RESIZE ═════════════ */
+function onResize(){
+  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight); if (composer){ composer.setSize(innerWidth, innerHeight); }
+  movePill();
+}
+addEventListener('resize', onResize);
+
+/* ═════════════ LOOP ═════════════ */
+const clock = new THREE.Clock(); let wasUnder = false, lastDropRipple = 0;
+const tmpC = new THREE.Color(); const pullV = new THREE.Vector3(); const depthDot = $('#depthDot'), depthVal = $('#depthVal');
+function tick(){
+  const dt = Math.min(clock.getDelta(), 0.05); TIME.value += dt; const t = TIME.value;
+  mouseS.lerp(mouse, 0.05);
+
+  // camera + parallax
+  const par = reduceMotion ? 0 : 1;
+  // portrait screens: pull the camera back so 3D scenes fit
+  const asp = innerWidth/innerHeight; const pullK = asp < 1 ? THREE.MathUtils.clamp(0.78/asp, 1, 1.9) : 1;
+  pullV.copy(camPos).sub(camTgt).multiplyScalar(pull.v*(pullK-1)).add(camPos);
+  camera.position.set(pullV.x + mouseS.x*1.6*par, pullV.y + mouseS.y*0.9*par + Math.sin(t*0.6)*0.15, pullV.z);
+  camera.lookAt(camTgt.x + mouseS.x*0.6*par, camTgt.y + mouseS.y*0.4*par, camTgt.z);
+  applyViewOffset();
+  sky.position.copy(camera.position);
+
+  // fog / underwater state
+  const y = camera.position.y, under = y < 0.15, depth = THREE.MathUtils.clamp(-y/70, 0, 1);
+  if (under){ tmpC.copy(PAL.fogShallow).lerp(PAL.fogDeep, Math.pow(depth, 0.8)); scene.fog.color.copy(tmpC); scene.fog.density = FOG.uFogDensity.value = 0.02 + depth*0.012; }
+  else { scene.fog.color.copy(PAL.fogAbove); scene.fog.density = FOG.uFogDensity.value = 0.0058; }
+  FOG.uUnder.value = under ? 1 : 0;
+  renderer.setClearColor(scene.fog.color);
+  if (under !== wasUnder && entered){ const s = $('#splash'); s.classList.remove('go'); void s.offsetWidth; s.classList.add('go'); if (!under) addRipple(camera.position.x, camera.position.z - 6, 1.2); }
+  wasUnder = under; SOUND.setUnder(under, depth);
+  depthDot.style.top = (depth*100) + '%'; depthVal.textContent = under ? `−${(-y).toFixed(1)} M` : 'SUPERFICIE';
+
+  // house
+  orb.rotation.y = t*0.3; orb.position.y = 3.65 + Math.sin(t*1.1)*0.12;
+  brandMat.color.setRGB(1.5 + HOUSE_HOVER.value*0.6, 1.4 + HOUSE_HOVER.value*0.5, 1.3 + HOUSE_HOVER.value*0.4);
+  warmA.intensity = 40 + HOUSE_HOVER.value*30; warmB.intensity = 30 + HOUSE_HOVER.value*25;
+  if (t - lastDropRipple > 3.2){ const a = Math.random()*Math.PI*2; addRipple(HOUSE_POS.x + Math.cos(a)*30, HOUSE_POS.z + 12 + Math.abs(Math.sin(a))*14, 0.4); lastDropRipple = t; }
+
+  // monoliths
+  monoliths.forEach(g => { g.position.y = g.userData.baseY + Math.sin(t*0.9 + g.userData.phase)*0.45; g.rotation.x = Math.sin(t*0.5 + g.userData.phase)*0.04; });
+  // funnel
+  funnel.rotation.y = t*0.08;
+  stageObjs.forEach((g, i) => { g.userData.orbs.forEach(o => { const a = o.userData.a + t*g.userData.speed*(i%2?-1:1); o.position.set(Math.cos(a)*g.userData.r, Math.sin(a*3+t)*0.25, Math.sin(a)*g.userData.r); });
+    g.children.forEach(c => { if (c.isSprite) { c.position.x = Math.cos(-funnel.rotation.y)*(g.userData.r+4.2); c.position.z = Math.sin(-funnel.rotation.y)*(g.userData.r+4.2); } }); });
+  if (funnel.userData.core) funnel.userData.core.scale.setScalar(1 + Math.sin(t*3)*0.15);
+  // carousel
+  if (!(hovered && hovered.room === 'studio')) carousel.rotation.y += dt*0.12;
+  cardMeshes.forEach(m => { m.position.y = Math.sin(t*0.8 + m.userData.phase)*0.35; });
+  // jelly follows
+  if (ROOMS[current].id === 'lab'){ const tx = mouseS.x*9, tyy = -58 + mouseS.y*4.5; jelly.position.x += (tx - jelly.position.x)*0.02; jelly.position.y += (tyy - jelly.position.y)*0.02; }
+  jelly.position.y += Math.sin(t*2.0)*0.012; jelly.rotation.y = t*0.15; jelly.rotation.z = (jelly.position.x)*-0.02;
+  // rays sway
+  rays.forEach((r,i) => r.rotation.z = r.userData.base + Math.sin(t*0.25 + i)*0.04);
+  kelp.visible = bubbles.visible = under || y < 20;
+  rays.forEach(r => r.visible = under);
+
+  // hover
+  const h = pick();
+  if (h !== hovered){ if (hovered && hovered.mat) gsap.to(hovered.mat.uniforms.uHover, {value:0, duration:.5}); if (hovered && hovered.group) gsap.to(hovered.group.scale, {x:1,y:1,z:1,duration:.6});
+    hovered = h; if (h && h.mat) gsap.to(h.mat.uniforms.uHover, {value:1, duration:.5}); if (h && h.group) gsap.to(h.group.scale, {x:1.06,y:1.06,z:1.06,duration:.6});
+    cursor.classList.toggle('big', !!h); $('#cursorLbl').textContent = h ? h.label : ''; canvas.style.cursor = h && !document.body.classList.contains('has-cursor') ? 'pointer' : ''; }
+  cur.x += (cur.tx - cur.x)*0.18; cur.y += (cur.ty - cur.y)*0.18; cursor.style.transform = `translate(${cur.x}px,${cur.y}px)`;
+
+  if (composer) composer.render(); else renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+
+/* ═════════════ BOOT ═════════════ */
+gsap.ticker.lagSmoothing(0);
+(async function boot(){
+  const word = $('#loaderWord'), pct = $('#loaderPct'); const prog = { v:0 };
+  const fill = gsap.to(prog, { v:85, duration:1.6, ease:'power2.out', onUpdate:()=>{ word.style.setProperty('--fill', prog.v+'%'); pct.textContent = String(Math.round(prog.v)).padStart(3,'0')+'%'; } });
+  try { await Promise.race([Promise.all([document.fonts.load('800 64px Syne'), document.fonts.load('400 30px Manrope'), document.fonts.load('500 26px "JetBrains Mono"')]), new Promise(r=>setTimeout(r, 3000))]); } catch(e) {}
+  brandMat.map.dispose(); brandMat.map = makeBrandTex(); brandMat.needsUpdate = true;
+  buildMonoliths(); buildFunnel(); buildCarousel(); buildJelly();
+  renderer.compile(scene, camera);
+  onResize(); requestAnimationFrame(tick);
+  await new Promise(r => setTimeout(r, 300)); fill.kill();
+  gsap.to(prog, { v:100, duration:.6, onUpdate:()=>{ word.style.setProperty('--fill', prog.v+'%'); pct.textContent = String(Math.round(prog.v)).padStart(3,'0')+'%'; } });
+  setTimeout(()=> $('#loaderActions').classList.add('show'), 500);
+  const start = (withSound) => {
+    if (entered) return; entered = true; if (withSound) SOUND.toggle(true);
+    $('#loader').classList.add('gone');
+    const target = idxOf(location.hash.slice(1) || 'front');
+    current = -1; goTo(target);
+  };
+  $$('[data-enter]').forEach(b => b.addEventListener('click', () => start(b.dataset.enter === 'sound')));
+  window.__waters = { goTo, openDetail, get current(){ return ROOMS[current]?.id; }, start };
+})();
+</script>
+</body>
+</html>
